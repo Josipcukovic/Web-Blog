@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Quicksand" />
+    <title>Document</title>
+</head>
+
+<body>
+    <header>
+        <nav class="grid">
+            <h1>Simple blog</h1>
+            <ul id="links">
+                <li><a href="#" id="login">Login</a></li>
+                <li><a href="#" id="register">Register</a></li>
+                <li><a href="#" id="newBlog">New blog</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <ul id="blog-list">
+            <!-- <li class="blog-content">
+                <h2 class="title">Title</h2>
+                <img src="cat.jpg" alt="#">
+                <p class="blog-text">tekst</p>
+            </li> -->
+        </ul>
+
+    </main>
+
+    <!--     
+    <form id="add-blog-form">
+        <input type="text" name="title" placeholder="Title">
+        <input type="text" name="body" placeholder="Body">
+        <button type="submit">Add Blog</button>
+    </form> -->
+
+
+    <div class="omotac">
+        <div class="popUp">
+            <div class="sadrzaj">
+                <form class="addNewBlogForm">
+                    <h2>Add a new blog</h2>
+                    <input type="text" name="title" placeholder="Title" required>
+                    <textarea name="body" placeholder="Input the text of your blog here..." required></textarea>
+                    <!-- <input type="text" name="body" > -->
+                    <button type="submit" onmouseleave="">Add Blog</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-firestore.js"></script>
+
+    <!-- TODO: Add SDKs for Firebase products that you want to use
+        https://firebase.google.com/docs/web/setup#available-libraries -->
+
+    <script>
+        // Your web app's Firebase configuration
+        var firebaseConfig = {
+            apiKey: "AIzaSyDCipF0T79auO_vSF-j4JUDZOYxXk98b8o",
+            authDomain: "blog-11a4b.firebaseapp.com",
+            projectId: "blog-11a4b",
+            storageBucket: "blog-11a4b.appspot.com",
+            messagingSenderId: "412830692922",
+            appId: "1:412830692922:web:355cdc9f11129eeb07a703"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+    </script>
+    <script src="http://cdn.date-fns.org/v1.9.0/date_fns.min.js"></script>
+    <script src="app.js"></script>
+</body>
+
+</html>
