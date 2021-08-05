@@ -71,6 +71,10 @@ li{
     background-color: rgb(245, 244, 244);
     display: none;
 }
+
+.commentSection.showComment{
+  display: block;
+}
 .commentsDisplay{
   padding-bottom: 10px;
 }
@@ -88,9 +92,9 @@ li{
   cursor: pointer;
 }
 
-.showComment{
+/* .showComment{
   display: block;
-}
+} */
 /*  */
 
 #blog-list img{

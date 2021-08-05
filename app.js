@@ -83,17 +83,83 @@ const addCommentFormListener = (forma, id) => {
         forma.reset();
     })
 }
-
+let removeListener;
 const addComentListener = (commentShow, commentSection) => {
     commentShow.addEventListener("click", e => {
-        commentSection.classList.toggle("showComment");
+
+        if (commentSection.classList.contains("showComment")) {
+            commentSection.classList.remove("showComment");
+            const commentList = event.target.parentElement.nextElementSibling.querySelector(".commentsDisplay");
+            commentList.innerHTML = "";
+            removeListener();
+        } else {
+            commentSection.classList.add("showComment");
+            const id = event.target.parentElement.getAttribute("id");
+
+
+            var unsub = commentRef.doc(id).collection("thisBlogComments").orderBy("created_at", "desc").limit(20).onSnapshot(snapshot => {
+                const mojUl = document.getElementById(id);
+                const commentSection = mojUl.nextElementSibling;
+
+                const listaKomentara = commentSection.querySelector(".commentsDisplay");
+                console.log(listaKomentara);
+
+
+                let changes = snapshot.docChanges().reverse();
+                changes.forEach(document => {
+                    if (document.doc.data() == undefined) {
+                        return;
+                    }
+                    console.log(document.doc.data());
+                    if (document.type == "added") {
+                        listaKomentara.insertAdjacentHTML('afterbegin', `<li>${document.doc.data().comment}</li>`);
+                    } else if (document.type == "removed") {
+                        ///do nothing for now
+                    }
+                })
+            })
+            removeListener = unsub;
+            // mylilFunction(doc, listaKomentara);
+            // dohvatiKomentare(id);
+
+        }
+        // commentSection.classList.add("showComment");
+        // commentSection.classList.toggle("showComment");
 
         // i sad tu provjeravas jel ima ovu gore klasu, ako ima dohvati komentare i prikazi ih, ako nema nema ni komentara
     })
 }
 
 function dohvatiKomentare(id) {
-    commentRef.doc(id).collection("thisBlogComments").orderBy("created_at", "desc").limit(20).onSnapshot(snapshot => {
+    // commentRef.doc(id).collection("thisBlogComments").orderBy("created_at", "desc").limit(20).onSnapshot(snapshot => {
+    //     const mojUl = document.getElementById(id);
+    //     const forma = mojUl.nextElementSibling.querySelector(".commentForm");
+    //     const commentSection = mojUl.nextElementSibling;
+    //     const commentShow = mojUl.querySelector(".commentPost");
+
+    //     const listaKomentara = commentSection.querySelector(".commentsDisplay");
+    //     console.log(listaKomentara);
+    //     addCommentFormListener(forma, id);
+    //     addComentListener(commentShow, commentSection, id);
+
+    //     let changes = snapshot.docChanges().reverse();
+    //     changes.forEach(document => {
+    //         if (document.doc.data() == undefined) {
+    //             return;
+    //         }
+    //         console.log(document.doc.data());
+    //         if (document.type == "added") {
+    //             listaKomentara.insertAdjacentHTML('afterbegin', `<li>${document.doc.data().comment}</li>`);
+    //         } else if (document.type == "removed") {
+    //             ///do nothing for now
+    //         }
+    //     })
+    // })
+
+
+
+
+    commentRef.doc(id).collection("thisBlogComments").orderBy("created_at", "desc").limit(20).get().then(doc => {
         const mojUl = document.getElementById(id);
         const forma = mojUl.nextElementSibling.querySelector(".commentForm");
         const commentSection = mojUl.nextElementSibling;
@@ -104,62 +170,45 @@ function dohvatiKomentare(id) {
         addCommentFormListener(forma, id);
         addComentListener(commentShow, commentSection);
 
-        let changes = snapshot.docChanges().reverse();
-        changes.forEach(document => {
-            if (document.doc.data() == undefined) {
-                return;
-            }
-            console.log(document.doc.data());
-            if (document.type == "added") {
-                listaKomentara.insertAdjacentHTML('afterbegin', `<li>${document.doc.data().comment}</li>`);
-            } else if (document.type == "removed") {
-                ///do nothing for now
-            }
-        })
+        ////probaj dodat listenera za svaki post i onda nes mozda morat brisati ul, neg samo stackas i tjt, svaki post ce imat svog listenera
+
+        // if (item.data() == undefined) {
+        //     return;
+        // }
+        // console.log(document.querySelector(`[data-id=${id}]`));
+        // doc.forEach(item => {
+        //     if (item.data() == undefined) {
+        //         return;
+        //     }
+        //     listaKomentara.innerHTML += `<li>${item.data().comment}</li>`;
+        //     console.log(item.data());
+        // });
+
+        // mylilFunction(doc);
     })
-
-
-
-
-    // commentRef.doc(id).collection("thisBlogComments").orderBy("created_at", "desc").limit(5).get().then(doc => {
-    //     const mojUl = document.getElementById(id);
-    //     const forma = mojUl.nextElementSibling.querySelector(".commentForm");
-    //     const commentSection = mojUl.nextElementSibling;
-    //     const commentShow = mojUl.querySelector(".commentPost");
-
-    //     const listaKomentara = commentSection.querySelector(".commentsDisplay");
-    //     console.log(listaKomentara);
-    //     addCommentFormListener(forma, id);
-    //     addComentListener(commentShow, commentSection);
-
-    //     ////probaj dodat listenera za svaki post i onda nes mozda morat brisati ul, neg samo stackas i tjt, svaki post ce imat svog listenera
-
-    //     // if (item.data() == undefined) {
-    //     //     return;
-    //     // }
-    //     // console.log(document.querySelector(`[data-id=${id}]`));
-    //     doc.forEach(item => {
-    //         if (item.data() == undefined) {
-    //             return;
-    //         }
-    //         listaKomentara.innerHTML += `<li>${item.data().comment}</li>`;
-    //         console.log(item.data());
-    //     });
-
-
-
-
-
-
-    // })
 }
+// function mylilFunction(doc, listaKomentara) {
 
+//     console.log(doc.docs.reverse());
+//     doc.docs.reverse().forEach(item => {
+//         if (item.data() == undefined) {
+//             return;
+//         }
+//         listaKomentara.insertAdjacentHTML('afterbegin', `<li>${item.data().comment}</li>`);
+//         // listaKomentara.innerHTML += `<li>${item.data().comment}</li>`;
+//         console.log(item.data());
+//     });
+// }
 ///brisanje i dodavanje komentara
 blogList.addEventListener("click", e => {
     e.preventDefault();
+
     if (e.target.classList.contains("delete")) {
-        e.target.parentElement.remove();
         const id = e.target.parentElement.getAttribute("id");
+        // e.target.parentElement.nextElementSibling.remove();
+        // e.target.parentElement.remove();
+
+
         blogRef.doc(id).delete();
     }
     // else if (e.target.classList.contains("addComment")) {
@@ -194,12 +243,15 @@ blogList.addEventListener("click", e => {
 ////listener
 blogRef.orderBy("created_at", "desc").limit(20).onSnapshot(snapshot => {
     let changes = snapshot.docChanges().reverse();
-    changes.forEach(document => {
+    changes.forEach(doc => {
 
-        if (document.type == "added") {
-            renderBlogData(document.doc);
-        } else if (document.type == "removed") {
-            ///do nothing for now
+        if (doc.type == "added") {
+            renderBlogData(doc.doc);
+        } else if (doc.type == "removed") {
+            const target = document.getElementById(doc.doc.id);
+            target.nextElementSibling.remove()
+            target.remove();
+            // console.log(document.doc.id);
         }
     })
 })
