@@ -45,19 +45,63 @@ li{
 #blog-list span{
     margin-bottom: 25px;
   }
-#blog-list li{
+#blog-list .blog-list-element{
     position: relative;
     max-width: 50%;
-    margin: 10px auto;
+    margin: 0px auto;
+    margin-top: 16px;
     border-bottom: 1px solid #e0e0e0;
     background-color: rgb(245, 244, 244);
 }
+/* comment div */
+.comment{
+  border-radius: 15px;
+  border-color:#e0e0e0 ;
+  background-color: #f7f4f4;
+  padding: 5px;
+  width: 80%;
+  outline: none;
+}
+
+.commentSection{
+  position: relative;
+    max-width: 50%;
+    margin: 0px auto;
+    border-bottom: 1px solid #e0e0e0;
+    background-color: rgb(245, 244, 244);
+    display: none;
+}
+.commentsDisplay{
+  padding-bottom: 10px;
+}
+.commentsDisplay li{
+  text-align: left;
+}
+.commentForm{
+  padding: 5px;
+}
+.commentPost{
+  position: absolute;
+  bottom: 0;
+  right: 2%;
+  color: #bbb9b9;
+  cursor: pointer;
+}
+
+.showComment{
+  display: block;
+}
+/*  */
+
 #blog-list img{
     width: 30%;
     height: 150px;
 }
 #blog-list li:hover{
     box-shadow: 5px 5px 50px rgba(0,0,0,0.2);
+}
+#blog-list{
+  margin-top: 0px;
 }
 li span{
     display: block;
@@ -94,8 +138,28 @@ main{
     text-align: center;
 }
 
+/* modals */
+.wrapper {
+    background: rgba(0, 0, 0, 0.5);
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+  }
 
-.omotac {
+  .wrapper-login {
+    background: rgba(0, 0, 0, 0.5);
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+  }
+
+  .wrapper-register{
     background: rgba(0, 0, 0, 0.5);
     position: fixed;
     top: 0;
@@ -105,30 +169,55 @@ main{
     display: none;
   }
   
+  
   .popUp {
     background: white;
     width: 40%;
-    height: 40%;
+    height: fit-content;
     border-radius: 5%;
     overflow-y: auto;
     margin: 10% auto;
     text-align: center;
     position: relative;
   }
-  .sadrzaj {
+  .content {
     padding: 20px;
   }
+ /*  */
  
+/* register module styles */
+.registerForm input,button{
+  margin: 15px auto;
+    display: block;
+    width: 60%;
+    padding: 5px;
+    font-size: 1.1em;
+}
+
+/*  */
+ /* login module styles */
+ 
+.loginForm input,button{
+  margin: 15px auto;
+    display: block;
+    width: 60%;
+    padding: 5px;
+    font-size: 1.1em;
+}
+ /*  */
+
+ /* new blog module styles */
   .addNewBlogForm textarea{
       padding: 10px;
   }
   .addNewBlogForm input,button,textarea{
     margin: 15px auto;
+    font-size: 1.1em;
     padding: 5px;
     width: 60%;
       display: block;
   }
-
+/*  */
   .tooltip{
     display: none;
       position: absolute;
@@ -139,10 +228,9 @@ main{
       z-index: 1;
   }
 
-  .mystyle{
+  .timeCreated{
     display: block;
 }
-
 
 .createdAt:hover{
     cursor: pointer;
