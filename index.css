@@ -30,6 +30,10 @@ nav ul{
     justify-content: flex-end;
     align-self: center;
 }
+/* kasnije mozda na neki bolji nacin */
+nav ul li{
+  display: none;
+}
 
 li{
     list-style-type: none;

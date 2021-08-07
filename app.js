@@ -263,16 +263,13 @@ const button = document.querySelector("#newBlog");
 const wrapper = document.querySelector(".wrapper");
 const popup = document.querySelectorAll(".popUp");
 
-
 const buttonLogin = document.querySelector("#login");
-const wrapperLogin = document.querySelector(".wrapper-login");
-
-
 const buttonRegister = document.querySelector("#register");
-const wrapperRegister = document.querySelector(".wrapper-register");
+
 
 button.addEventListener("click", (e) => {
     wrapper.style.display = "block";
+    //declared in auth.js
     wrapperLogin.style.display = "none";
     wrapperRegister.style.display = "none";
 

@@ -18,6 +18,7 @@
                 <li class="login"><a href="#" id="login">Login</a></li>
                 <li class="register"><a href="#" id="register">Register</a></li>
                 <li class="NewBlog"><a href="#" id="newBlog">New blog</a></li>
+                <li class="Logout"><a href="#" id="logout">Logout</a></li>
             </ul>
         </nav>
     </header>
@@ -45,8 +46,8 @@
             <div class="content">
                 <form class="loginForm">
                     <h2>Login</h2>
-                    <input type="text" name="email" placeholder="Your Email" required>
-                    <input type="text" name="password" placeholder="Your password" required>
+                    <input type="email" name="email" placeholder="Your Email" required>
+                    <input type="password" name="password" placeholder="Your password" required>
                     <button type="submit">Login</button>
                 </form>
             </div>
@@ -61,8 +62,8 @@
                     <h2>Register</h2>
                     <input type="text" name="name" placeholder="Your name" required>
                     <input type="text" name="last-name" placeholder="Your last name" required>
-                    <input type="text" name="email" placeholder="Your Email" required>
-                    <input type="text" name="password" placeholder="Your password" required>
+                    <input type="email" name="email" placeholder="Your Email" required>
+                    <input type="password" name="password" placeholder="Your password" required>
                     <button type="submit" onmouseleave="">Register</button>
                 </form>
             </div>
@@ -72,7 +73,7 @@
     <!-- The core Firebase JS SDK is always required and must be listed first -->
     <script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-firestore.js"></script>
-
+    <script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-auth.js"></script>
     <!-- TODO: Add SDKs for Firebase products that you want to use
         https://firebase.google.com/docs/web/setup#available-libraries -->
 
