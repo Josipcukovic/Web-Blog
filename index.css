@@ -57,6 +57,11 @@ li{
     border-bottom: 1px solid #e0e0e0;
     background-color: rgb(245, 244, 244);
 }
+/* .blog-list-element h2{
+  text-align: left;
+  margin: 0;
+  font-size: 1.1em;
+} */
 /* comment div */
 .comment{
   border-radius: 15px;
@@ -242,4 +247,15 @@ main{
 
 .createdAt:hover{
     cursor: pointer;
+}
+
+
+
+.author{
+  position: absolute;
+  top: 0;
+  color: black;
+  /* right: 2%;
+  
+  cursor: pointer; */
 }

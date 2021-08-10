@@ -96,10 +96,14 @@ const logout = document.querySelector(".Logout");
 const login = document.querySelector(".login");
 const register = document.querySelector(".register");
 const newBlog = document.querySelector(".NewBlog");
+const home = document.querySelector(".home");
 
 function showElements(user) {
     if (user) {
         // kada budes refaktorirao, idi s classlist
+        if (home) {
+            home.style.display = "block";
+        }
         login.style.display = "none";
         register.style.display = "none";
         logout.style.display = "block";
