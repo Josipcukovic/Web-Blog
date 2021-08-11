@@ -16,6 +16,7 @@
             <h1>Simple blog</h1>
             <ul id="links">
                 <li class="home"><a href="index.html" id="home">Home</a></li>
+                <li class="myProfile"><a href="myProfile.html" id="myprofile">My profile</a></li>
                 <li class="login"><a href="#" id="login">Login</a></li>
                 <li class="register"><a href="#" id="register">Register</a></li>
                 <li class="NewBlog"><a href="#" id="newBlog">New blog</a></li>
@@ -32,7 +33,7 @@
                 <form class="addNewBlogForm">
                     <h2>Add a new blog</h2>
                     <input type="text" name="title" placeholder="Title" required>
-                    <input type="file" value="upload" id="blogPhoto" />
+                    <input type="file" value="upload" id="blogPhoto" required />
                     <textarea name="body" placeholder="Input the text of your blog here..." required></textarea>
                     <button type="submit">Add Blog</button>
                 </form>
@@ -80,6 +81,7 @@
         https://firebase.google.com/docs/web/setup#available-libraries -->
 
     <script src="auth.js"></script>
+    <script src="registerAndLogin.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/date-fns/1.30.1/date_fns.min.js"></script>
     <script src="zajednicki.js"></script>
     <script src="blogDetails.js"></script>

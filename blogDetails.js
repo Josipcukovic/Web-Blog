@@ -10,7 +10,7 @@ function toggleTimeCreated() {
 
 ///dohvati blog
 blogRef.doc(id).get().then(document => {
-  console.log(auth.currentUser.displayName);
+  console.log(document.data());
   const data = document.data();
   const created_at = data.created_at.toDate();
   const now = new Date().getTime();
@@ -41,3 +41,11 @@ blogRef.doc(id).get().then(document => {
 });
 
 
+const link = document.querySelector(".myProfile");
+
+link.addEventListener("click", e => {
+  console.log(e.target);
+  localStorage.setItem("id", auth.currentUser.uid);
+  unsub();
+  window.location.href = "myProfile.html";
+});

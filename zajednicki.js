@@ -22,6 +22,7 @@ addBlogPictureButton.addEventListener("change", e => {
     const Storageref = storageDb.ref("Blog pictures/" + uid());
 
     Storageref.child(name).put(file, metadata).then((snapshot) => snapshot.ref.getDownloadURL()).then((link) => {
+        ///dodaj postotak uploada
         linkSlike = link;
     });
 
@@ -33,13 +34,16 @@ blogForm.addEventListener("submit", e => {
     const now = new Date();
     const titleValue = blogForm["title"].value;
     const bodyValue = blogForm["body"].value;
+
     blogRef.add({
         title: titleValue,
         body: bodyValue,
         created_at: firebase.firestore.Timestamp.fromDate(now),
         created_by: auth.currentUser.displayName,
+        created_by_id: auth.currentUser.uid,
         picture: linkSlike
     })
+    linkSlike = null;
     blogForm.reset();
 
 })
@@ -131,6 +135,11 @@ const buttonLogin = document.querySelector("#login");
 const buttonRegister = document.querySelector("#register");
 
 
+
+const wrapperRegister = document.querySelector(".wrapper-register");
+const wrapperLogin = document.querySelector(".wrapper-login");
+
+
 button.addEventListener("click", (e) => {
     wrapper.style.display = "block";
     //declared in auth.js
@@ -158,12 +167,14 @@ buttonLogin.addEventListener("click", (e) => {
     wrapper.style.display = "none";
     wrapperRegister.style.display = "none";
 });
+if (wrapperLogin) {
+    wrapperLogin.addEventListener("click", (e) => {
+        if (e.target.className != "content") {
+            wrapperLogin.style.display = "none";
+        }
+    });
+}
 
-wrapperLogin.addEventListener("click", (e) => {
-    if (e.target.className != "content") {
-        wrapperLogin.style.display = "none";
-    }
-});
 
 //register
 
@@ -173,8 +184,11 @@ buttonRegister.addEventListener("click", (e) => {
     wrapper.style.display = "none";
 });
 
-wrapperRegister.addEventListener("click", (e) => {
-    if (e.target.className != "content") {
-        wrapperRegister.style.display = "none";
-    }
-});
+if (wrapperRegister) {
+    wrapperRegister.addEventListener("click", (e) => {
+        if (e.target.className != "content") {
+            wrapperRegister.style.display = "none";
+        }
+    });
+}
+
