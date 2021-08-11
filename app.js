@@ -6,11 +6,12 @@ const renderBlogData = (document) => {
     const now = new Date().getTime();
     const timeAgo = dateFns.distanceInWords(now, created_at.getTime(), { addSuffix: true });
     // console.log(data);
+
     const blogTemplate = ` <li class="blog-list-element" id=${document.id}> 
     <div class="prikaziBlog">
-    <span>${data.title}</span>
-     <img src="cat.jpg" alt="#">
-      <span>${data.body}</span> 
+    <span class="prikaziBlogChildren">${data.title}</span>
+     <img  class="prikaziBlogChildren" src="${data.picture != null ? data.picture : cat}" alt="#">
+      <span class="prikaziBlogChildren">${data.body}</span> 
       </div>
       <div class = "tooltip"> ${created_at.toLocaleDateString()} at ${created_at.toLocaleTimeString()} </div>
       <p class="createdAt" onmouseover="toggleTimeCreated()" onmouseleave="toggleTimeCreated()"> ${timeAgo} </p> 
@@ -59,6 +60,12 @@ blogList.addEventListener("click", e => {
 
     } else if (e.target.classList.contains("prikaziBlog")) {
         const id = e.target.parentElement.getAttribute("id");
+        console.log(e.target);
+        localStorage.setItem("id", id);
+        unsub();
+        window.location.href = "blogDetails.html";
+    } else if (e.target.classList.contains("prikaziBlogChildren")) {
+        const id = e.target.parentElement.parentElement.getAttribute("id");
         console.log(e.target);
         localStorage.setItem("id", id);
         unsub();

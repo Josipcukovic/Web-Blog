@@ -1,10 +1,33 @@
 const blogRef = db.collection("blogs");
 const commentRef = db.collection("comments");
-
+let linkSlike;
 
 const blogForm = document.querySelector(".addNewBlogForm");
-const blogList = document.querySelector("#blog-list");
+const cat = "cat.jpg"
 
+const blogList = document.querySelector("#blog-list");
+const addBlogPictureButton = document.getElementById("blogPhoto");
+
+
+const uid = function () {
+    return Date.now().toString(36) + Math.random().toString(36).substr(1) + Math.random().toString(36).substr(1);
+}
+
+addBlogPictureButton.addEventListener("change", e => {
+    const file = e.target.files[0];
+    const name = file.name;
+    const metadata = {
+        contentType: file.type,
+    };
+    const Storageref = storageDb.ref("Blog pictures/" + uid());
+
+    Storageref.child(name).put(file, metadata).then((snapshot) => snapshot.ref.getDownloadURL()).then((link) => {
+        linkSlike = link;
+    });
+
+
+});
+///dodavanje novog bloga
 blogForm.addEventListener("submit", e => {
     e.preventDefault();
     const now = new Date();
@@ -14,9 +37,11 @@ blogForm.addEventListener("submit", e => {
         title: titleValue,
         body: bodyValue,
         created_at: firebase.firestore.Timestamp.fromDate(now),
-        created_by: auth.currentUser.displayName
+        created_by: auth.currentUser.displayName,
+        picture: linkSlike
     })
     blogForm.reset();
+
 })
 
 function toggleTimeCreated() {

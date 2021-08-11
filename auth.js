@@ -10,6 +10,7 @@ var firebaseConfig = {
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
+const storageDb = firebase.storage();
 const auth = firebase.auth();
 //
 auth.onAuthStateChanged((user) => {
@@ -117,3 +118,75 @@ function showElements(user) {
 
     }
 }
+
+// const photo = document.getElementById("photo");
+// const slika = document.querySelector(".myImage");
+// //storage
+// photo.addEventListener("change", (e) => {
+//     var currentUser = firebase.auth().currentUser;
+//     const file = e.target.files[0];
+
+//     ///da se prikaze odmah
+//     reader = new FileReader();
+//     reader.onload = () => {
+//         slika.src = reader.result;
+//     }
+//     reader.readAsDataURL(file);
+//     //// cita sliku s kompa za profil dusu dalo, ne moras refreshat 
+//     console.log(e.target.files);
+//     const name = file.name;
+//     const metadata = {
+//         contentType: file.type,
+//     };
+//     const Storageref = storageDb.ref("Profile pictures/" + currentUser.uid);
+//     alert("Pričekajte nekoliko trenutaka učitavanje slike profila.");
+
+//     Storageref.child(name).put(file, metadata).then((snapshot) => snapshot.ref.getDownloadURL()).then((link) => {
+//         currentUser.updateProfile({ photoURL: link }).then(function () {
+//             userRef.doc(currentUser.uid).update({
+//                 slika: link,
+//             });
+//             // location.reload();
+//         }).catch(function (error) { window.alert(error.message) });
+
+//     });
+// });
+
+
+
+const blogPhoto = document.getElementById("blogPhoto");
+// const blogRef = db.collection("blogs");
+
+// const buttoncic = document.getElementById("selectImage");
+// buttoncic.addEventListener("click", e => {
+//     e.preventDefault();
+//     var input = document.createElement("input");
+//     input.type = "file";
+//     input.click();
+
+//     input.onchange = e => {
+//         var currentUser = firebase.auth().currentUser;
+//         const file = e.target.files[0];
+
+//         const name = file.name;
+//         const metadata = {
+//             contentType: file.type,
+//         };
+//         const Storageref = storageDb.ref("Blog pictures/" + currentUser.uid);
+
+
+//         Storageref.child(name).put(file, metadata).then((snapshot) => snapshot.ref.getDownloadURL()).then((link) => {
+//             currentUser.updateProfile({ photoURL: link }).then(function () {
+//                 userRef.doc(currentUser.uid).update({
+//                     slika: link,
+//                 });
+//                 // location.reload();
+//             }).catch(function (error) { window.alert(error.message) });
+
+//         });
+
+//     }
+
+
+
+// })

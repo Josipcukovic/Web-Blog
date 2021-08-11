@@ -32,6 +32,7 @@
                 <form class="addNewBlogForm">
                     <h2>Add a new blog</h2>
                     <input type="text" name="title" placeholder="Title" required>
+                    <input type="file" value="upload" id="blogPhoto" />
                     <textarea name="body" placeholder="Input the text of your blog here..." required></textarea>
                     <button type="submit">Add Blog</button>
                 </form>
@@ -69,13 +70,12 @@
         </div>
     </div>
 
-    <p>nova stranica</p>
-
 
     <!-- The core Firebase JS SDK is always required and must be listed first -->
     <script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-firestore.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-storage.js"></script>
     <!-- TODO: Add SDKs for Firebase products that you want to use
         https://firebase.google.com/docs/web/setup#available-libraries -->
 
