@@ -63,7 +63,8 @@ const addCommentFormListener = (forma, id) => {
         }
         commentRef.doc(id).collection("thisBlogComments").add({
             comment,
-            created_at: firebase.firestore.Timestamp.fromDate(now)
+            created_at: firebase.firestore.Timestamp.fromDate(now),
+            created_by_id: auth.currentUser.uid
         })
         forma.reset();
     })
@@ -75,11 +76,14 @@ const addComentListener = (commentShow, commentSection) => {
     commentShow.addEventListener("click", e => {
 
         if (commentSection.classList.contains("showComment")) {
+
             commentSection.classList.remove("showComment");
             const commentList = event.target.parentElement.nextElementSibling.querySelector(".commentsDisplay");
             commentList.innerHTML = "";
             removeListener();
+
         } else {
+
             commentSection.classList.add("showComment");
             const id = event.target.parentElement.getAttribute("id");
 
@@ -89,8 +93,6 @@ const addComentListener = (commentShow, commentSection) => {
                 const commentSection = mojUl.nextElementSibling;
 
                 const listaKomentara = commentSection.querySelector(".commentsDisplay");
-                console.log(listaKomentara);
-
 
                 let changes = snapshot.docChanges().reverse();
                 changes.forEach(document => {
@@ -99,7 +101,16 @@ const addComentListener = (commentShow, commentSection) => {
                     }
                     console.log(document.doc.data());
                     if (document.type == "added") {
-                        listaKomentara.insertAdjacentHTML('afterbegin', `<li>${document.doc.data().comment}</li>`);
+
+                        userRef.doc(document.doc.data().created_by_id).get().then(doc => {
+
+                            const data = doc.data();
+                            listaKomentara.insertAdjacentHTML('afterbegin', `<li class="commentElement grid"><img src="${data ? data.slika : "cat.jpg"}" alt="#" class="pictureOnComment"><r>${data ? `${data.ime} ${data.prezime}` : "unknown"}</r><z>${document.doc.data().comment}</z></li>`);
+                            // main.innerHTML += template;
+                        });
+
+
+                        // listaKomentara.insertAdjacentHTML('afterbegin', `<li class="commentElement grid"><img src="cat.jpg" alt="#" class="pictureOnComment"><z>${document.doc.data().comment}</z></li>`);
                     } else if (document.type == "removed") {
                         ///do nothing for now
                     }

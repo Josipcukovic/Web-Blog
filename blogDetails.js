@@ -48,10 +48,10 @@ blogRef.doc(id).get().then(document => {
       </li> 
 
       <div class ="commentSection" >
-      <ul class="commentsDisplay"> </ul>
       <form class="commentForm">
         <input type="text" name="comment" placeholder="Your comment..." class="comment">
       </form>
+      <ul class="commentsDisplay"> </ul>
       </div> `
     blogList.insertAdjacentHTML('afterbegin', blogTemplate);
     dohvatiKomentare(document.id);

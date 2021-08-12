@@ -29,10 +29,10 @@ blogRef.where("created_by_id", "==", id).orderBy("created_at", "asc").get().then
             </li> 
 
             <div class ="commentSection" >
-            <ul class="commentsDisplay"> </ul>
             <form class="commentForm">
               <input type="text" name="comment" placeholder="Your comment..." class="comment">
             </form>
+            <ul class="commentsDisplay"> </ul>
             </div> `
         blogList.insertAdjacentHTML('afterbegin', blogTemplate);
         dohvatiKomentare(blog.id);

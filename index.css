@@ -8,7 +8,7 @@ body{
 .grid{
     display: grid;
     grid-template-columns: repeat(12, 1fr);
-    gap: 10px;
+    /* gap: 10px; */
     box-sizing: border-box;
   }
 
@@ -42,7 +42,7 @@ li{
 }
 
 /* /////// */
-#blog-list img{
+.blog-list-element img{
   margin-bottom: 15px;
 }
 
@@ -283,5 +283,29 @@ a:hover{
   top: 2%;
   width: 50px;
   height: 50px;
+  border-radius: 50%;
+}
+
+.commentElement r{
+  grid-column: 2/13;
+  grid-row: 1;
+  padding-left: 5px;
+  align-self: top;
+}
+
+.commentElement z{
+  /* position: relative;
+  top: -20px; */
+  padding-top: 25px;
+  padding-left: 5px;
+  grid-column: 2/13;
+  grid-row: 1;
+  align-self: center;
+}
+
+
+.pictureOnComment{
+  height: 50px;
+  width: 50px;
   border-radius: 50%;
 }
