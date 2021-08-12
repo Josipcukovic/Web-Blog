@@ -42,6 +42,7 @@ loginForm.addEventListener("submit", e => {
     auth.signInWithEmailAndPassword(email, password).then(() => {
         wrapperLogin.style.display = "none";
         loginForm.reset();
+        location.reload();
     }).catch((error) => {
         window.alert(error.message);
     });

@@ -6,25 +6,28 @@ const renderBlogData = (document) => {
     const now = new Date().getTime();
     const timeAgo = dateFns.distanceInWords(now, created_at.getTime(), { addSuffix: true });
     // console.log(data);
-
+    const deleteTemplate = `<div class='delete' >X</div>`;
+    const uvjet = (auth.currentUser != null);
     const blogTemplate = ` <li class="blog-list-element" id=${document.id}> 
     <div class="prikaziBlog">
     <span class="prikaziBlogChildren">${data.title}</span>
-     <img  class="prikaziBlogChildren" src="${data.picture != null ? data.picture : cat}" alt="#">
+     <img  class="prikaziBlogChildren blogPicture" src="${data.picture != null ? data.picture : cat}" alt="#">
       <span class="prikaziBlogChildren">${data.body}</span> 
       </div>
       <div class = "tooltip"> ${created_at.toLocaleDateString()} at ${created_at.toLocaleTimeString()} </div>
       <p class="createdAt" onmouseover="toggleTimeCreated()" onmouseleave="toggleTimeCreated()"> ${timeAgo} </p> 
       <p class="commentPost">Comment this post</p>
-      <div class='delete' >X</div>
+      
+      ${(uvjet && (data.created_by_id == auth.currentUser.uid) ? deleteTemplate : "")}
+      
          
       </li> 
 
       <div class ="commentSection">
-      <ul class="commentsDisplay"> </ul>
       <form class="commentForm">
         <input type="text" name="comment" placeholder="Your comment..." class="comment">
       </form>
+      <ul class="commentsDisplay"> </ul>
       </div>
       `
 
@@ -42,7 +45,7 @@ const unsub = blogRef.orderBy("created_at", "desc").limit(20).onSnapshot(snapsho
             renderBlogData(doc.doc);
         } else if (doc.type == "removed") {
             const target = document.getElementById(doc.doc.id);
-            target.nextElementSibling.remove()
+            target.nextElementSibling.remove();
             target.remove();
         }
     })
@@ -71,7 +74,6 @@ blogList.addEventListener("click", e => {
         unsub();
         window.location.href = "blogDetails.html";
     }
-
 })
 
 

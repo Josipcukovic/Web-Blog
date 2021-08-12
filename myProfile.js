@@ -17,9 +17,9 @@ blogRef.where("created_by_id", "==", id).orderBy("created_at", "asc").get().then
         const timeAgo = dateFns.distanceInWords(now, created_at.getTime(), { addSuffix: true });
 
         const blogTemplate = ` <li class="blog-list-element" id=${blog.id}> 
-          <p class ="author">Written by: ${data.created_by}</p>
+          <p class ="author mojProfil">Written by: ${"Well, You"}</p>
           <span>${data.title}</span>
-          <img src="${data.picture != null ? data.picture : cat}" alt="#">
+          <img src="${data.picture != null ? data.picture : cat}" alt="#" class="blogPicture">
             <span>${data.body}</span> 
             <div class = "tooltip"> ${created_at.toLocaleDateString()} at ${created_at.toLocaleTimeString()} </div>
             <p class="createdAt" onmouseover="toggleTimeCreated()" onmouseleave="toggleTimeCreated()"> ${timeAgo} </p> 
@@ -81,3 +81,19 @@ profilePhoto.addEventListener("change", e => {
 
 
 });
+
+
+
+//deleting blogs logic, declared in zajednicki.js
+
+
+blogList.addEventListener("click", e => {
+    e.preventDefault();
+    if (e.target.classList.contains("delete")) {
+        const id = e.target.parentElement.getAttribute("id");
+        const target = document.getElementById(id);
+        target.nextElementSibling.remove();
+        target.remove();
+        blogRef.doc(id).delete();
+    }
+})

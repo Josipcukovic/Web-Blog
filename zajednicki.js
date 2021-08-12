@@ -119,7 +119,6 @@ function dohvatiKomentare(id) {
     const commentShow = mojUl.querySelector(".commentPost");
 
     const listaKomentara = commentSection.querySelector(".commentsDisplay");
-    console.log(listaKomentara);
     addCommentFormListener(forma, id);
     addComentListener(commentShow, commentSection);
 }

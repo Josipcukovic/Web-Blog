@@ -107,7 +107,7 @@ li{
 } */
 /*  */
 
-#blog-list img{
+#blog-list .blogPicture{
     width: 30%;
     height: 150px;
 }
@@ -254,11 +254,18 @@ a:hover{
 
 .author{
   position: absolute;
-  top: 0;
+  /* top: 0; */
+  left: 60px;
+  top: 0px;
   color: black;
   /* right: 2%;
   
   cursor: pointer; */
+}
+
+.author.mojProfil{
+  left: 5px;
+  top: 0px;
 }
 
 /* #profilePhoto{
@@ -270,3 +277,11 @@ a:hover{
 /* my profile stranica */
 
 
+.profilna{
+  position: absolute;
+  left: 1%;
+  top: 2%;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}

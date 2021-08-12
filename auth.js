@@ -17,8 +17,6 @@ const myname = document.querySelector(".myName");
 auth.onAuthStateChanged((user) => {
     if (user) {
         console.log(auth.currentUser.uid);
-        console.log(auth.currentUser.displayName);
-
         // const toDoRef = db.ref(`/toDo/${auth.currentUser.uid}`);
         showElements(user);
         // toDoRef.on("child_added", showTodo);
@@ -92,6 +90,8 @@ logoutButton.addEventListener("click", (e) => {
     auth.signOut().catch((error) => {
         window.alert(error.message);
     });
+
+    window.location.href = "index.html";
 });
 
 
@@ -103,11 +103,12 @@ const home = document.querySelector(".home");
 const myprofile = document.querySelector(".myProfile");
 
 function showElements(user) {
+    if (home) {
+        home.style.display = "block";
+    }
     if (user) {
         // kada budes refaktorirao, idi s classlist
-        if (home) {
-            home.style.display = "block";
-        }
+
         if (myprofile) {
             myprofile.style.display = "block";
         }
