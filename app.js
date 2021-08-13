@@ -1,13 +1,16 @@
 
+
 ///prikaz
 const renderBlogData = (document) => {
+
     const data = document.data();
     const created_at = data.created_at.toDate();
     const now = new Date().getTime();
     const timeAgo = dateFns.distanceInWords(now, created_at.getTime(), { addSuffix: true });
-    // console.log(data);
     const deleteTemplate = `<div class='delete' >X</div>`;
     const uvjet = (auth.currentUser != null);
+
+
     const blogTemplate = ` <li class="blog-list-element" id=${document.id}> 
     <div class="prikaziBlog">
     <span class="prikaziBlogChildren">${data.title}</span>
@@ -17,10 +20,11 @@ const renderBlogData = (document) => {
       <div class = "tooltip"> ${created_at.toLocaleDateString()} at ${created_at.toLocaleTimeString()} </div>
       <p class="createdAt" onmouseover="toggleTimeCreated()" onmouseleave="toggleTimeCreated()"> ${timeAgo} </p> 
       <p class="commentPost">Comment this post</p>
-      
-      ${(uvjet && (data.created_by_id == auth.currentUser.uid) ? deleteTemplate : "")}
-      
-         
+
+
+      ${((uvjet && (data.created_by_id == auth.currentUser.uid) || (uvjet && auth.currentUser.uid == idToCheck.id)) ? deleteTemplate : "")}
+
+
       </li> 
 
       <div class ="commentSection">
@@ -36,9 +40,53 @@ const renderBlogData = (document) => {
 }
 
 
+
+// return first.get().then((documentSnapshots) => {
+//     // Get the last visible document
+//     var lastVisible = documentSnapshots.docs[documentSnapshots.docs.length-1];
+//     console.log("last", lastVisible);
+
+//     // Construct a new query starting at this document,
+//     // get the next 25 cities.
+//     var next = db.collection("cities")
+//             .orderBy("population")
+//             .startAfter(lastVisible)
+//             .limit(25);
+//   });
+
+
+// const btn = document.querySelector(".klikni");
+// var lastVisible;
+// var next;
+
+// btn.addEventListener("click", e => {
+//     next.get().then(snapshot => {
+//         lastVisible = snapshot.docs[snapshot.docs.length - 1];
+//         next = blogRef
+//             .orderBy("created_at", "desc")
+//             .startAfter(lastVisible)
+//             .limit(2);
+//         console.log(lastVisible);
+//         snapshot.forEach(item => {
+
+//             renderBlogData(item, 'beforeend');
+//         })
+//     })
+// })
 ////listener
 const unsub = blogRef.orderBy("created_at", "desc").limit(20).onSnapshot(snapshot => {
     let changes = snapshot.docChanges().reverse();
+
+    // lastVisible = snapshot.docs[snapshot.docs.length - 1];
+    // console.log("last", lastVisible);
+
+    // Construct a new query starting at this document,
+    // get the next 25 cities.
+    // next = blogRef
+    //     .orderBy("created_at", "desc")
+    //     .startAfter(lastVisible)
+    //     .limit(2);
+
     changes.forEach(doc => {
 
         if (doc.type == "added") {

@@ -25,7 +25,16 @@ auth.onAuthStateChanged((user) => {
     }
 });
 
+let idToCheck = "";
+const adminRef = db.collection("admins");
 
+adminRef.get().then(docs => {
+    docs.forEach(admin => {
+        idToCheck = admin.data();
+    })
+}).catch(eror => {
+    ///do nothing, just catch it
+})
 
 // const wrapperRegister = document.querySelector(".wrapper-register");
 // const wrapperLogin = document.querySelector(".wrapper-login");

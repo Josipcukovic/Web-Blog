@@ -34,7 +34,13 @@ blogForm.addEventListener("submit", e => {
     const now = new Date();
     const titleValue = blogForm["title"].value;
     const bodyValue = blogForm["body"].value;
-
+    if (auth.currentUser == null) {
+        ////none registrated user wants to make a new post
+        alert("Congratz, you almost made a new post but please, You must login to make new posts");
+        blogForm.reset();
+        blogForm.parentElement.parentElement.parentElement.remove();
+        return;
+    }
     blogRef.add({
         title: titleValue,
         body: bodyValue,
@@ -60,6 +66,10 @@ const addCommentFormListener = (forma, id) => {
         if (comment.trim() == "") {
             forma.reset();
             return;
+        } else if (auth.currentUser == null) {
+            alert("You must login to comment");
+            forma.reset();
+            return;
         }
         commentRef.doc(id).collection("thisBlogComments").add({
             comment,
@@ -74,7 +84,6 @@ const addCommentFormListener = (forma, id) => {
 let removeListener;
 const addComentListener = (commentShow, commentSection) => {
     commentShow.addEventListener("click", e => {
-
         if (commentSection.classList.contains("showComment")) {
 
             commentSection.classList.remove("showComment");
@@ -99,13 +108,12 @@ const addComentListener = (commentShow, commentSection) => {
                     if (document.doc.data() == undefined) {
                         return;
                     }
-                    console.log(document.doc.data());
                     if (document.type == "added") {
 
                         userRef.doc(document.doc.data().created_by_id).get().then(doc => {
 
                             const data = doc.data();
-                            listaKomentara.insertAdjacentHTML('afterbegin', `<li class="commentElement grid"><img src="${data ? data.slika : "cat.jpg"}" alt="#" class="pictureOnComment"><r>${data ? `${data.ime} ${data.prezime}` : "unknown"}</r><z>${document.doc.data().comment}</z></li>`);
+                            listaKomentara.insertAdjacentHTML('afterbegin', `<li class="commentElement grid"><img src="${(data && data.slika) ? data.slika : "cat.jpg"}" alt="#" class="pictureOnComment"><r>${data ? `${data.ime} ${data.prezime}` : "unknown"}</r><z>${document.doc.data().comment}</z></li>`);
                             // main.innerHTML += template;
                         });
 

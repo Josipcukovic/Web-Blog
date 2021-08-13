@@ -309,3 +309,8 @@ a:hover{
   width: 50px;
   border-radius: 50%;
 }
+
+
+.prikaziBlogChildren{
+  word-wrap: break-word;
+}
