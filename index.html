@@ -10,11 +10,14 @@
     <title>Document</title>
 </head>
 
+<!-- <button class="klikni">Klikni</button> -->
 
 <body>
     <header>
         <nav class="grid">
-            <h1>Simple blog</h1>
+            <a href="index.html">
+                <h1>Simple blog</h1>
+            </a>
             <ul id="links">
                 <li class="myProfile"><a href="#" id="myprofile">My profile</a></li>
                 <li class="login"><a href="#" id="login">Login</a></li>
@@ -22,13 +25,20 @@
                 <li class="NewBlog"><a href="#" id="newBlog">New blog</a></li>
                 <li class="Logout"><a href="#" id="logout">Logout</a></li>
 
+
             </ul>
+            <form class="trazilica">
+                <input type="text" class="trazenjeBloga" name="searchBox" placeholder="Search by title..">
+            </form>
         </nav>
     </header>
     <!-- <input type="file" value="upload" id="photo" />
     <img class="myImage" alt="#"> -->
+
+    <!-- <button class="getBack">Reset</button> -->
     <main>
         <ul id="blog-list"></ul>
+        <p class="noMorePostsMessage">There are no more posts...</p>
     </main>
     <!-- new blog module -->
     <div class="wrapper">
@@ -85,6 +95,7 @@
         https://firebase.google.com/docs/web/setup#available-libraries -->
 
     <script src="auth.js"></script>
+    <script src="renderBlogs.js"></script>
     <script src="registerAndLogin.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/date-fns/1.30.1/date_fns.min.js"></script>
     <script src="zajednicki.js"></script>

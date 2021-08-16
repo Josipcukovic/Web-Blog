@@ -12,11 +12,15 @@ body{
     box-sizing: border-box;
   }
 
-  nav h1{
+  nav a{
     grid-column: 3/5;
     grid-row: 1;
     padding-bottom: 10px;
     display: inline-block;
+    color: black;
+}
+nav a:hover{
+  color: black;
 }
 header{
     position: sticky;
@@ -313,4 +317,26 @@ a:hover{
 
 .prikaziBlogChildren{
   word-wrap: break-word;
+}
+
+.noMorePostsMessage{
+  display: none;
+text-align: center;
+font-weight: bold;
+}
+
+.trazilica{
+  align-self: center;
+  grid-column: 11/13;
+  grid-row: 1;
+}
+
+.trazilica input {
+ outline: none;
+ border-radius: 10px;
+
+ border-color: rgb(245, 244, 244);
+ background-color: #f7f4f4;
+ border: 1px solid #e0e0e0;
+  padding: 6px;
 }

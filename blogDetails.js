@@ -71,7 +71,6 @@ const link = document.querySelector(".myProfile");
 link.addEventListener("click", e => {
   console.log(e.target);
   localStorage.setItem("id", auth.currentUser.uid);
-  unsub();
   window.location.href = "myProfile.html";
 });
 

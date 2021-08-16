@@ -28,6 +28,9 @@ addBlogPictureButton.addEventListener("change", e => {
 
 
 });
+
+const putanja = window.location.pathname;
+
 ///dodavanje novog bloga
 blogForm.addEventListener("submit", e => {
     e.preventDefault();
@@ -42,13 +45,26 @@ blogForm.addEventListener("submit", e => {
         return;
     }
     blogRef.add({
-        title: titleValue,
-        body: bodyValue,
+        title: titleValue.trim(),
+        title_search: titleValue.toLowerCase().trim(),
+        body: bodyValue.trim(),
         created_at: firebase.firestore.Timestamp.fromDate(now),
         created_by: auth.currentUser.displayName,
         created_by_id: auth.currentUser.uid,
         picture: linkSlike
-    })
+    });
+    ////get new one
+    if (putanja == "/index.html") {
+        blogRef.orderBy("created_at", "desc").limit(1).get().then(snapshot => {
+            let changes = snapshot.docChanges().reverse();
+
+            changes.forEach(doc => {
+                renderBlogData(doc.doc, 'afterbegin');
+            })
+        });
+    }
+
+
     linkSlike = null;
     blogForm.reset();
 
@@ -87,7 +103,9 @@ const addComentListener = (commentShow, commentSection) => {
         if (commentSection.classList.contains("showComment")) {
 
             commentSection.classList.remove("showComment");
+            console.log(event.target.parentElement);
             const commentList = event.target.parentElement.nextElementSibling.querySelector(".commentsDisplay");
+
             commentList.innerHTML = "";
             removeListener();
 
@@ -100,6 +118,7 @@ const addComentListener = (commentShow, commentSection) => {
             var unsub = commentRef.doc(id).collection("thisBlogComments").orderBy("created_at", "desc").limit(20).onSnapshot(snapshot => {
                 const mojUl = document.getElementById(id);
                 const commentSection = mojUl.nextElementSibling;
+                console.log(snapshot.docs);
 
                 const listaKomentara = commentSection.querySelector(".commentsDisplay");
 
@@ -209,4 +228,7 @@ if (wrapperRegister) {
         }
     });
 }
+
+
+
 
