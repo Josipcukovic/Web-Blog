@@ -1,3 +1,4 @@
+
 // Your web app's Firebase configuration
 var firebaseConfig = {
     apiKey: "AIzaSyDCipF0T79auO_vSF-j4JUDZOYxXk98b8o",
@@ -31,6 +32,14 @@ const adminRef = db.collection("admins");
 adminRef.get().then(docs => {
     docs.forEach(admin => {
         idToCheck = admin.data();
+
+
+        ///promjeni ovo ako je potrebno
+        if (auth.currentUser.uid == idToCheck.id) {
+            const linkovi = document.querySelector("#links");
+            const template = `<li class="reportedBlogs"><a href="reportedStuff.html" id="reportedBlogs">Reported Blogs</a></li>`;
+            linkovi.insertAdjacentHTML('afterbegin', template);
+        }
     })
 }).catch(eror => {
     ///do nothing, just catch it
@@ -121,7 +130,6 @@ function showElements(user) {
         if (myprofile) {
             myprofile.style.display = "block";
         }
-
         login.style.display = "none";
         register.style.display = "none";
         logout.style.display = "block";

@@ -340,3 +340,8 @@ font-weight: bold;
  border: 1px solid #e0e0e0;
   padding: 6px;
 }
+
+
+.reportedBlogs{
+  display: block;
+}

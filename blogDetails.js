@@ -86,3 +86,45 @@ blogList.addEventListener("click", e => {
     blogRef.doc(id).delete();
   }
 })
+
+
+const reportButton = document.querySelector(".report");
+const reportsRef = db.collection("reports");
+
+reportButton.addEventListener("click", e => {
+
+  reportsRef.doc(id).get().then((doc) => {
+
+    if (doc.exists) {
+      console.log("Document data:", doc.data());
+      reportsRef.doc(id).set({
+        reportedId: id,
+        reportedTimes: (doc.data().reportedTimes ? doc.data().reportedTimes + 1 : 0)
+      });
+
+    } else {
+      // doc.data() will be undefined in this case
+      reportsRef.doc(id).set({
+        reportedId: id,
+        reportedTimes: 1
+      });
+      console.log("No such document!");
+    }
+
+  }).catch((error) => {
+    console.log("Error getting document");
+  });
+
+
+})
+
+
+
+
+// commentRef.doc(id).collection("thisBlogComments").add({
+//   comment,
+//   created_at: firebase.firestore.Timestamp.fromDate(now),
+//   created_by_id: auth.currentUser.uid
+// })
+
+// userRef.doc(`${currentUser.uid}`).set(user);

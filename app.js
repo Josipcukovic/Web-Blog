@@ -189,3 +189,9 @@ link.addEventListener("click", e => {
     localStorage.setItem("id", auth.currentUser.uid);
     window.location.href = "myProfile.html";
 });
+
+
+
+
+
+// blogList.insertAdjacentHTML(stackOrder, blogTemplate);
