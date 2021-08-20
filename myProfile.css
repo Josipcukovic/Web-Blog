@@ -44,7 +44,7 @@
   border-radius: 10%;
 }
  #blog-list {
-  overflow-x: scroll;
+  overflow-y: scroll;
   max-height: 600px;
 }
 main{

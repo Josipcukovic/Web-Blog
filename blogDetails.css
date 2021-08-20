@@ -1,0 +1,12 @@
+.commentsDisplay{
+    padding-bottom: 10px;
+    overflow-y: scroll;
+    max-height: 190px;
+  }
+  .commentsDisplay::-webkit-scrollbar {
+    width: 0;  /* Remove scrollbar space */
+    background: transparent;  /* Optional: just make scrollbar invisible */
+  }
+  .dataBody{
+      word-wrap: break-word;
+  }

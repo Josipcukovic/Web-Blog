@@ -84,6 +84,9 @@ li{
     background-color: rgb(245, 244, 244);
     display: none;
 }
+.commentSection.details{
+  max-width: 100%;
+}
 
 .commentSection.showComment{
   display: block;
@@ -91,6 +94,7 @@ li{
 .commentsDisplay{
   padding-bottom: 10px;
 }
+
 .commentsDisplay li{
   text-align: left;
 }
@@ -120,6 +124,7 @@ li{
 }
 #blog-list{
   margin-top: 0px;
+  padding: 0;
 }
 li span{
     display: block;
@@ -316,7 +321,11 @@ a:hover{
 
 
 .prikaziBlogChildren{
-  word-wrap: break-word;
+  /* word-wrap: break-word; */
+  text-overflow: ellipsis;
+white-space: nowrap;
+overflow: hidden;
+  max-width: 100%;
 }
 
 .noMorePostsMessage{
@@ -344,4 +353,34 @@ font-weight: bold;
 
 .reportedBlogs{
   display: block;
+}
+.deleteReportedPost{
+  
+  background-color: lightcoral;
+}
+.okPost{
+  background-color: lightgreen;
+}
+
+.deleteReportedPost, .okPost{
+  display: inline;
+  width: 35%;
+  margin: 0px;
+}
+
+
+
+.nekaKlasa{
+  max-width: 50%;
+  margin: 0px auto;
+  padding-bottom: 16px;
+}
+
+.nekaKlasa .report{
+  width: 30%;
+  margin: 0;
+  background-color: lightcoral;
+}
+.nekaKlasa #blog-list .blog-list-element {
+  max-width: 100%;
 }

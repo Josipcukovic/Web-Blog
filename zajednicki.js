@@ -98,6 +98,7 @@ const addCommentFormListener = (forma, id) => {
 
 
 let removeListener;
+///prikazivanje komentara
 const addComentListener = (commentShow, commentSection) => {
     commentShow.addEventListener("click", e => {
         if (commentSection.classList.contains("showComment")) {

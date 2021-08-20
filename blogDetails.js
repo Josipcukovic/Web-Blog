@@ -8,6 +8,37 @@ function toggleTimeCreated() {
   event.target.previousElementSibling.classList.toggle("timeCreated");
 }
 
+
+const getComments = (id) => {
+  commentRef.doc(id).collection("thisBlogComments").orderBy("created_at", "desc").limit(20).onSnapshot(snapshot => {
+    console.log(snapshot);
+    const mojUl = document.getElementById(id);
+    const commentSection = mojUl.nextElementSibling;
+    const forma = commentSection.querySelector(".commentForm");
+    addCommentFormListener(forma, id);
+    console.log(snapshot.docs);
+
+    const listaKomentara = commentSection.querySelector(".commentsDisplay");
+
+    let changes = snapshot.docChanges().reverse();
+    changes.forEach(document => {
+      if (document.doc.data() == undefined) {
+        return;
+      }
+      if (document.type == "added") {
+        userRef.doc(document.doc.data().created_by_id).get().then(doc => {
+
+          const data = doc.data();
+          listaKomentara.insertAdjacentHTML('afterbegin', `<li class="commentElement grid"><img src="${(data && data.slika) ? data.slika : "cat.jpg"}" alt="#" class="pictureOnComment"><r>${data ? `${data.ime} ${data.prezime}` : "unknown"}</r><z>${document.doc.data().comment}</z></li>`);
+          // main.innerHTML += template;
+        });
+      }
+
+    })
+  })
+}
+
+
 ///dohvati blog
 blogRef.doc(id).get().then(document => {
   console.log(document.data());
@@ -17,6 +48,7 @@ blogRef.doc(id).get().then(document => {
   const timeAgo = dateFns.distanceInWords(now, created_at.getTime(), { addSuffix: true });
   let njegova;
   const ownerOfTheBlog = auth.currentUser ? (data.created_by_id == auth.currentUser.uid) : false;
+  const ownerOfTheBlogOrAdmin = auth.currentUser ? ((data.created_by_id == auth.currentUser.uid) || (auth.currentUser.uid == idToCheck.id)) : false;
   ///ovo je privremeno tu, promjeni to tako da svaki user mora imati sliku cim se registrira, tj uvalis mu defaultnu. Takodjer obrisi sve stare postove i usere
   //tako da svi imaju id itd... ovo njegova ces isto obrisati i izmjeniti tako sto ce uzeti userovu sliku, posto ju mora imati i ubacit ces ju
   userRef.doc(data.created_by_id).get().then(user => {
@@ -39,22 +71,22 @@ blogRef.doc(id).get().then(document => {
     <p class ="author">Written by: ${ownerOfTheBlog ? "You" : data.created_by}</p>
     <span>${data.title}</span>
     <img src="${data.picture != null ? data.picture : cat}" alt="#" class="blogPicture">
-      <span>${data.body}</span> 
+      <span class="dataBody">${data.body}</span> 
       <div class = "tooltip"> ${created_at.toLocaleDateString()} at ${created_at.toLocaleTimeString()} </div>
       <p class="createdAt" onmouseover="toggleTimeCreated()" onmouseleave="toggleTimeCreated()"> ${timeAgo} </p> 
-      <p class="commentPost">Comment this post</p>
-      ${ownerOfTheBlog ? deleteTemplate : ""}
+      ${ownerOfTheBlogOrAdmin ? deleteTemplate : ""}
          
       </li> 
 
-      <div class ="commentSection" >
+      <div class ="commentSection details showComment" >
       <form class="commentForm">
         <input type="text" name="comment" placeholder="Your comment..." class="comment">
       </form>
       <ul class="commentsDisplay"> </ul>
       </div> `
     blogList.insertAdjacentHTML('afterbegin', blogTemplate);
-    dohvatiKomentare(document.id);
+    getComments(document.id);
+
   })
   //////
 
@@ -117,6 +149,10 @@ reportButton.addEventListener("click", e => {
 
 
 })
+
+
+
+
 
 
 
