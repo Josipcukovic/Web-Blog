@@ -1,9 +1,6 @@
 .prikaziBlogChildren{
-    /* word-wrap: break-word; */
     text-overflow: unset;
   white-space: normal;
-  
-    /* max-width: 100%; */
   }
   main h2{
       text-align: center;
