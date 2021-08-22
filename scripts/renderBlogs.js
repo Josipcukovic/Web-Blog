@@ -29,10 +29,11 @@ const renderBlogData = (document, stackOrder) => {
 
       ${((uvjet && (data.created_by_id == auth.currentUser.uid) || (uvjet && auth.currentUser.uid == idToCheck.id)) ? deleteTemplate : "")}
       ${(putanja == "/reportedStuff.html") ? `<button class="okPost">This post is fine</button>` : ""}
-
-      </li> 
-
+     
+        </li> 
+      
       ${(putanja != "/reportedStuff.html") ? commentSectionTemplate : ""}
+      
       `
 
   blogList.insertAdjacentHTML(stackOrder, blogTemplate);

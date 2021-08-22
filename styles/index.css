@@ -267,6 +267,7 @@ a:hover{
   left: 60px;
   top: 0px;
   color: black;
+  height: fit-content;
   /* right: 2%;
   
   cursor: pointer; */

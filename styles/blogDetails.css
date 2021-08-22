@@ -10,3 +10,38 @@
   .dataBody{
       word-wrap: break-word;
   }
+
+  .like, .dislike{
+    cursor: pointer;
+    text-align: center;
+  }
+ 
+  .like-number{
+    display: inline-block;
+    margin: 0;
+
+  } 
+  .likeContainer{
+    grid-column: 5/8;
+    grid-row: 1;
+    align-items: center;
+  }
+  .likeContainer p{
+   display: inline;
+  }
+  
+  .dislike-number{
+    display: inline-block;
+    margin: 0;
+  }
+  .dislikeContainer{
+    grid-column: 8/13;
+    grid-row: 1;
+    margin-left: 5%;
+  }
+
+  .reactionContainer{
+    background-color: #f7f4f4;
+    border-bottom: 1px solid #e0e0e0;
+    padding: 5px;
+  }

@@ -89,6 +89,7 @@ blogList.addEventListener("click", e => {
         console.log(e.target);
         localStorage.setItem("id", id);
         window.location.href = "blogDetails.html";
+        ////like logic
     }
 })
 

@@ -13,7 +13,7 @@ const getComments = (id) => {
   commentRef.doc(id).collection("thisBlogComments").orderBy("created_at", "desc").limit(20).onSnapshot(snapshot => {
     console.log(snapshot);
     const mojUl = document.getElementById(id);
-    const commentSection = mojUl.nextElementSibling;
+    const commentSection = document.querySelector(".commentSection")
     const forma = commentSection.querySelector(".commentForm");
     addCommentFormListener(forma, id);
     console.log(snapshot.docs);
@@ -65,6 +65,8 @@ blogRef.doc(id).get().then(document => {
     else {
       njegova = "cat.jpg";
     }
+    {/* <button class="like">Like</button>
+      <button class="dislike">Dislike</button> */}
     const deleteTemplate = `<div class='delete' >X</div>`;
     const blogTemplate = ` <li class="blog-list-element" id=${document.id}> 
   <img src="${ownerOfTheBlog ? (auth.currentUser.photoURL != null ? auth.currentUser.photoURL : "cat.jpg") : njegova}" alt="#" class="profilna">
@@ -75,9 +77,19 @@ blogRef.doc(id).get().then(document => {
       <div class = "tooltip"> ${created_at.toLocaleDateString()} at ${created_at.toLocaleTimeString()} </div>
       <p class="createdAt" onmouseover="toggleTimeCreated()" onmouseleave="toggleTimeCreated()"> ${timeAgo} </p> 
       ${ownerOfTheBlogOrAdmin ? deleteTemplate : ""}
-         
+      
       </li> 
-
+      <div class="reactionContainer grid">
+      <div class="likeContainer">
+      <p class="like-number"></p>
+      <i class="fas fa-thumbs-up  fa-lg like"></i>
+      </div>
+      <div class="dislikeContainer">
+      <p class="dislike-number"></p>
+      <i class="fas fa-thumbs-down fa-lg dislike"></i>
+      </div>
+      </div>
+      
       <div class ="commentSection details showComment" >
       <form class="commentForm">
         <input type="text" name="comment" placeholder="Your comment..." class="comment">
@@ -86,7 +98,7 @@ blogRef.doc(id).get().then(document => {
       </div> `
     blogList.insertAdjacentHTML('afterbegin', blogTemplate);
     getComments(document.id);
-
+    getLikes();
   })
   //////
 
@@ -97,6 +109,30 @@ blogRef.doc(id).get().then(document => {
 
 });
 
+function getLikes() {
+  const likeRef2 = db.collection("likes").doc(id).collection("likedBy");
+  const dislikeRef = db.collection("dislikes").doc(id).collection("dislikedBy");
+
+  likeRef2.get().then((doc) => {
+    ///kako dobiti broj lajkova
+    console.log("liked", doc.size);
+    const likeNumber = document.querySelector(".like-number");
+    likeNumber.innerHTML = doc.size;
+
+  }).catch((error) => {
+    console.log("Error getting document", error);
+  });
+
+  dislikeRef.get().then((doc) => {
+    ///kako dobiti broj lajkova
+    console.log("disliked", doc.size);
+    const dislikeNumber = document.querySelector(".dislike-number");
+    dislikeNumber.innerHTML = doc.size;
+
+  }).catch((error) => {
+    console.log("Error getting document", error);
+  });
+}
 
 const link = document.querySelector(".myProfile");
 
@@ -105,6 +141,22 @@ link.addEventListener("click", e => {
   localStorage.setItem("id", auth.currentUser.uid);
   window.location.href = "myProfile.html";
 });
+
+
+////lajkovi
+
+const handleLikesAndDislikes = (path) => {
+  path.get().then((doc) => {
+
+    if (doc.exists) {
+      console.log("Document data:", doc.data());
+      path.delete();
+    }
+  })
+};
+
+
+
 
 
 //deleting
@@ -116,10 +168,30 @@ blogList.addEventListener("click", e => {
     target.nextElementSibling.remove();
     target.remove();
     blogRef.doc(id).delete();
+    //like logic
+  } else if (e.target.classList.contains("like")) {
+    const likeRef = db.collection("likes");
+    const dislikeRef = db.collection("dislikes").doc(id).collection("dislikedBy").doc(auth.currentUser.uid);
+    handleLikesAndDislikes(dislikeRef);
+
+    likeRef.doc(id).collection("likedBy").doc(auth.currentUser.uid).set({
+      likedby: auth.currentUser.uid
+    })
+
+    //dislike logic
+  } else if (e.target.classList.contains("dislike")) {
+    const dislikeRef = db.collection("dislikes");
+    console.log(id, auth.currentUser.uid);
+    const likeRef = db.collection("likes").doc(id).collection("likedBy").doc(auth.currentUser.uid);;
+    handleLikesAndDislikes(likeRef);
+
+    dislikeRef.doc(id).collection("dislikedBy").doc(auth.currentUser.uid).set({
+      dislikedby: auth.currentUser.uid
+    })
   }
 })
 
-
+////reporting
 const reportButton = document.querySelector(".report");
 const reportsRef = db.collection("reports");
 
@@ -135,12 +207,10 @@ reportButton.addEventListener("click", e => {
       });
 
     } else {
-      // doc.data() will be undefined in this case
       reportsRef.doc(id).set({
         reportedId: id,
         reportedTimes: 1
       });
-      console.log("No such document!");
     }
 
   }).catch((error) => {
@@ -149,18 +219,3 @@ reportButton.addEventListener("click", e => {
 
 
 })
-
-
-
-
-
-
-
-
-// commentRef.doc(id).collection("thisBlogComments").add({
-//   comment,
-//   created_at: firebase.firestore.Timestamp.fromDate(now),
-//   created_by_id: auth.currentUser.uid
-// })
-
-// userRef.doc(`${currentUser.uid}`).set(user);
