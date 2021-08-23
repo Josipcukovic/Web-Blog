@@ -1,5 +1,7 @@
 const registerForm = document.querySelector(".registerForm");
 const userRef = db.collection("users");
+
+
 ///register
 registerForm.addEventListener("submit", e => {
     e.preventDefault();
@@ -22,10 +24,11 @@ registerForm.addEventListener("submit", e => {
             email
         }
 
-        userRef.doc(`${currentUser.uid}`).set(user);
-        alert(currentUser.displayName);
-        wrapperRegister.style.display = "none"
-        registerForm.reset();
+        userRef.doc(`${currentUser.uid}`).set(user).then(data => {
+            wrapperRegister.style.display = "none"
+            registerForm.reset();
+            window.location.reload();
+        });
 
     }).catch((error) => {
         window.alert(error.message);

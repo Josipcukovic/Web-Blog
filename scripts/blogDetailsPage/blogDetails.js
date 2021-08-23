@@ -1,8 +1,6 @@
-// const blogReff = db.collection("blogs");
-// const blogList = document.querySelector("#blog-list");
 const id = localStorage.getItem("id");
 console.log(id);
-
+const reportButton = document.querySelector(".report");
 
 function toggleTimeCreated() {
   event.target.previousElementSibling.classList.toggle("timeCreated");
@@ -41,7 +39,6 @@ const getComments = (id) => {
 
 ///dohvati blog
 blogRef.doc(id).get().then(document => {
-  console.log(document.data());
   const data = document.data();
   const created_at = data.created_at.toDate();
   const now = new Date().getTime();
@@ -65,8 +62,7 @@ blogRef.doc(id).get().then(document => {
     else {
       njegova = "cat.jpg";
     }
-    {/* <button class="like">Like</button>
-      <button class="dislike">Dislike</button> */}
+
     const deleteTemplate = `<div class='delete' >X</div>`;
     const blogTemplate = ` <li class="blog-list-element" id=${document.id}> 
   <img src="${ownerOfTheBlog ? (auth.currentUser.photoURL != null ? auth.currentUser.photoURL : "cat.jpg") : njegova}" alt="#" class="profilna">
@@ -95,48 +91,50 @@ blogRef.doc(id).get().then(document => {
         <input type="text" name="comment" placeholder="Your comment..." class="comment">
       </form>
       <ul class="commentsDisplay"> </ul>
-      </div> `
+      </div> 
+      `
     blogList.insertAdjacentHTML('afterbegin', blogTemplate);
     getComments(document.id);
     getLikes();
+    reportButton.classList.add("show");
   })
-  //////
-
-
-
-
-
 
 });
 
+let unsubLikes = null;
+let unsubDislikes = null;
+
 function getLikes() {
+
   const likeRef2 = db.collection("likes").doc(id).collection("likedBy");
   const dislikeRef = db.collection("dislikes").doc(id).collection("dislikedBy");
 
-  likeRef2.get().then((doc) => {
+  unsubLikes = likeRef2.onSnapshot((doc) => {
     ///kako dobiti broj lajkova
     console.log("liked", doc.size);
     const likeNumber = document.querySelector(".like-number");
     likeNumber.innerHTML = doc.size;
 
-  }).catch((error) => {
-    console.log("Error getting document", error);
-  });
+  })
 
-  dislikeRef.get().then((doc) => {
+  unsubDislikes = dislikeRef.onSnapshot((doc) => {
     ///kako dobiti broj lajkova
     console.log("disliked", doc.size);
     const dislikeNumber = document.querySelector(".dislike-number");
     dislikeNumber.innerHTML = doc.size;
 
-  }).catch((error) => {
-    console.log("Error getting document", error);
-  });
+  })
 }
 
 const link = document.querySelector(".myProfile");
 
 link.addEventListener("click", e => {
+  if (unsubLikes != null) {
+    unsubLikes();
+  }
+  if (unsubDislikes != null) {
+    unsubDislikes();
+  }
   console.log(e.target);
   localStorage.setItem("id", auth.currentUser.uid);
   window.location.href = "myProfile.html";
@@ -192,7 +190,7 @@ blogList.addEventListener("click", e => {
 })
 
 ////reporting
-const reportButton = document.querySelector(".report");
+
 const reportsRef = db.collection("reports");
 
 reportButton.addEventListener("click", e => {

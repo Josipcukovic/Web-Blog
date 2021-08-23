@@ -1,6 +1,6 @@
 const renderBlogData = (document, stackOrder) => {
   const putanja = window.location.pathname;
-
+  const cat = "cat.jpg"
   const data = document.data();
   const created_at = data.created_at.toDate();
   const now = new Date().getTime();

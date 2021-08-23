@@ -153,13 +153,10 @@ const addComentListener = (commentShow, commentSection) => {
 function dohvatiKomentare(id) {
 
     const mojUl = document.getElementById(id);
-    console.log(mojUl);
-
     const forma = mojUl.nextElementSibling.querySelector(".commentForm");
     const commentSection = mojUl.nextElementSibling;
     const commentShow = mojUl.querySelector(".commentPost");
 
-    const listaKomentara = commentSection.querySelector(".commentsDisplay");
     addCommentFormListener(forma, id);
     addComentListener(commentShow, commentSection);
 

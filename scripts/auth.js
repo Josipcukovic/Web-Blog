@@ -13,32 +13,79 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 const storageDb = firebase.storage();
 const auth = firebase.auth();
-const myname = document.querySelector(".myName");
+const adminRef = db.collection("admins");
 //
 auth.onAuthStateChanged((user) => {
     if (user) {
-        console.log(auth.currentUser.uid);
-        // const toDoRef = db.ref(`/toDo/${auth.currentUser.uid}`);
         showElements(user);
-        // toDoRef.on("child_added", showTodo);
     } else {
         showElements();
     }
 });
 
+// const registerForm = document.querySelector(".registerForm");
+// const userRef = db.collection("users");
+// ///register
+// registerForm.addEventListener("submit", e => {
+//     e.preventDefault();
+//     registerForm["name"].value
+//     const ime = registerForm["name"].value;
+//     const prezime = registerForm["last-name"].value;
+//     const email = registerForm["email"].value;
+//     const password = registerForm["password"].value;
+//     const punoIme = `${ime} ${prezime}`;
+
+//     auth.createUserWithEmailAndPassword(email, password).then(() => {
+//         let currentUser = auth.currentUser;
+//         currentUser.updateProfile({ displayName: punoIme }).catch(function (error) {
+//             // An error happened.
+//             console.log(error)
+//         });
+//         const user = {
+//             ime,
+//             prezime,
+//             email
+//         }
+
+//         userRef.doc(`${currentUser.uid}`).set(user);
+//         wrapperRegister.style.display = "none"
+//         registerForm.reset();
+//         window.location.reload();
+//     }).catch((error) => {
+//         window.alert(error.message);
+//     });
+// })
+// ///login
+// const loginForm = document.querySelector(".loginForm");
+
+// loginForm.addEventListener("submit", e => {
+//     e.preventDefault();
+//     const email = loginForm["email"].value;
+//     const password = loginForm["password"].value;
+
+//     auth.signInWithEmailAndPassword(email, password).then(() => {
+//         wrapperLogin.style.display = "none";
+//         loginForm.reset();
+//         location.reload();
+//     }).catch((error) => {
+//         window.alert(error.message);
+//     });
+// })
+
+
+
+
+
 let idToCheck = "";
-const adminRef = db.collection("admins");
 
 adminRef.get().then(docs => {
     docs.forEach(admin => {
         idToCheck = admin.data();
-
-
         ///promjeni ovo ako je potrebno
         if (auth.currentUser.uid == idToCheck.id) {
-            const linkovi = document.querySelector("#links");
-            const template = `<li class="reportedBlogs"><a href="reportedStuff.html" id="reportedBlogs">Reported Posts</a></li>`;
-            linkovi.insertAdjacentHTML('afterbegin', template);
+            const navLinks = document.querySelector("#nav-links");
+            const reportedPostsTemplate = `<li class="reportedPosts"><a href="reportedStuff.html">Reported Posts</a></li>`;
+            navLinks.insertAdjacentHTML('afterbegin', reportedPostsTemplate);
         }
     })
 }).catch(eror => {
@@ -51,46 +98,37 @@ const logoutButton = document.querySelector("#logout");
 
 logoutButton.addEventListener("click", (e) => {
     e.preventDefault();
-    console.log("odlogiran si");
     auth.signOut().catch((error) => {
         window.alert(error.message);
     });
-
     window.location.href = "index.html";
 });
 
 
-const logout = document.querySelector(".Logout");
-const login = document.querySelector(".login");
-const register = document.querySelector(".register");
-const newBlog = document.querySelector(".NewBlog");
-const home = document.querySelector(".home");
-const myprofile = document.querySelector(".myProfile");
+
+
+const loggedIn = document.querySelectorAll(".loggedIn");
+const loggedOut = document.querySelectorAll(".loggedOut");
 
 function showElements(user) {
-    if (home) {
-        home.style.display = "block";
-    }
+
     if (user) {
-        // kada budes refaktorirao, idi s classlist
+        loggedIn.forEach(element => {
+            element.classList.add("showElement");
+        });
 
-        if (myprofile) {
-            myprofile.style.display = "block";
-        }
-        login.style.display = "none";
-        register.style.display = "none";
-        logout.style.display = "block";
-        newBlog.style.display = "block"
-    }
-    else {
-        myprofile.style.display = "none";
-        logout.style.display = "none";
-        login.style.display = "block";
-        register.style.display = "block";
-        newBlog.style.display = "none"
+        loggedOut.forEach(element => {
+            element.classList.add("hideElement");
+        });
 
+    } else {
+        loggedIn.forEach(element => {
+            element.classList.add("hideElement");
+        });
+
+        loggedOut.forEach(element => {
+            element.classList.add("showElement");
+        });
     }
 }
 
-
-// const blogPhoto = document.getElementById("blogPhoto");

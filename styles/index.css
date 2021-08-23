@@ -147,7 +147,10 @@ li p{
   color: #bbb9b9;
 }
 /*  */
-#links li:hover{
+#nav-links{
+  margin: 0;
+}
+#nav-links li:hover{
     background: rgb(223, 223, 223);
 }
 a{
@@ -352,7 +355,7 @@ font-weight: bold;
 }
 
 
-.reportedBlogs{
+.reportedPosts{
   display: block;
 }
 .deleteReportedPost{
@@ -380,8 +383,16 @@ font-weight: bold;
 .nekaKlasa .report{
   width: 30%;
   margin: 0;
-  background-color: lightcoral;
+ /* bila je lightcolar */
+  background-color: rgb(235, 211, 211);
 }
 .nekaKlasa #blog-list .blog-list-element {
   max-width: 100%;
+}
+
+.showElement{
+  display: block;
+}
+.hideElement{
+  display: none;
 }
