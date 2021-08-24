@@ -408,11 +408,11 @@ font-weight: bold;
   display: none;
 }
 
-
-/* .toggle-button {
+/* hamburger */
+.toggle-button {
   grid-column: 10/13;
   align-self: center;
-  display: flex;
+  display: none;
   flex-direction: column;
   justify-content: space-between;
   width: 40px;
@@ -425,7 +425,7 @@ font-weight: bold;
   width: 100%;
   background-color: black;
   border-radius: 10px;
-} */
+}
 
 /* responzivnost */
 @media only screen and (max-width: 2100px) and (min-width: 1700px){
@@ -449,12 +449,17 @@ font-weight: bold;
 }
 
 @media only screen and (max-width: 943px){
-  
+  /* li{
+    margin: 0;
+  } */
+  .NewBlog,.myProfile {
+    margin: 0;
+  }
 .Logout {
   align-self: center;
 }
 .trazenjeBloga{
-  transform: translate(-20px, 0px);
+  transform: translate(-15px, 0px);
 }
 }
 
@@ -482,6 +487,7 @@ font-weight: bold;
 nav a{
   grid-column: 2/5;
 }
+
 
 }
 
@@ -513,12 +519,35 @@ nav a{
   #blog-list .blogPicture{
     width: 80%;
   }
-  /* .toggle-button{
+  /* hamburger */
+  .toggle-button{
     display: flex;
   }
   #nav-links{
+    grid-row: 2; 
+    grid-column: 4/9;
+    flex-direction: column;
+    text-align: center;
     display: none;
-  } */
+  }
+
+  #nav-links.active{
+    display: flex;
+  }
+
+  .trazilica{
+    grid-column: 4/10;
+    grid-row: 3; 
+    text-align: center;
+    padding-bottom: 10px;
+    display: none;
+  }
+  .trazilica.active{
+    display: block;
+  }
+  .Logout{
+    margin: 0;
+  }
 }
 
 

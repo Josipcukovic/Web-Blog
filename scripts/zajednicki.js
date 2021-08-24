@@ -278,3 +278,17 @@ if (wrapperRegister) {
         }
     });
 }
+
+
+
+const toggleHamburgerButton = document.querySelector(".toggle-button");
+const navLinks = document.querySelector("#nav-links");
+const searchBoxy = document.querySelector(".trazilica");
+
+toggleHamburgerButton.addEventListener("click", e => {
+    navLinks.classList.toggle("active");
+    if (searchBoxy) {
+        searchBoxy.classList.toggle("active");
+    }
+
+})
