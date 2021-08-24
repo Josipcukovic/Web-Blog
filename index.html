@@ -19,6 +19,11 @@
             <a href="index.html">
                 <h1>Simple blog</h1>
             </a>
+            <!-- <a href="#" class="toggle-button">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </a> -->
             <ul id="nav-links">
                 <li class="myProfile loggedIn"><a href="#" id="myprofile">My profile</a></li>
                 <li class="login loggedOut"><a href="#" id="login">Login</a></li>
@@ -47,9 +52,13 @@
             <div class="content">
                 <form class="addNewBlogForm">
                     <h2>Add a new blog</h2>
+
                     <input type="text" name="title" placeholder="Title" required>
-                    <!-- <button id="selectImage" type="button">Select image for your post</button> -->
-                    <input type="file" value="upload" id="blogPhoto" required />
+                    <button id="selectImage" type="button">Select image for your post</button>
+                    <!-- <button type="button" onclick="document.getElementById('blogPhoto').click()" required>Select your
+                        image</button> -->
+                    <!-- <input type="file" value="upload" id="blogPhoto" required /> -->
+                    <p class="loadingMessage">Loading...</p>
                     <textarea name="body" placeholder="Input the text of your blog here..." required></textarea>
                     <button type="submit">Add Blog</button>
                 </form>

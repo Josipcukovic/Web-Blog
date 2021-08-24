@@ -63,3 +63,7 @@ main{
 #blog-list .blog-list-element{
     max-width: 70%;
 }
+
+.dataBody{
+  word-wrap: break-word;
+}

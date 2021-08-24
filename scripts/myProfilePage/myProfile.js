@@ -20,7 +20,7 @@ blogRef.where("created_by_id", "==", id).orderBy("created_at", "asc").get().then
           <p class ="author mojProfil">Written by: ${"Well, You"}</p>
           <span>${data.title}</span>
           <img src="${data.picture != null ? data.picture : cat}" alt="#" class="blogPicture">
-            <span>${data.body}</span> 
+            <span class="dataBody">${data.body}</span> 
             <div class = "tooltip"> ${created_at.toLocaleDateString()} at ${created_at.toLocaleTimeString()} </div>
             <p class="createdAt" onmouseover="toggleTimeCreated()" onmouseleave="toggleTimeCreated()"> ${timeAgo} </p> 
             <p class="commentPost">Comment this post</p>

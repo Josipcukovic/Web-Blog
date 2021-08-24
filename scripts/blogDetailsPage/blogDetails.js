@@ -9,30 +9,10 @@ function toggleTimeCreated() {
 
 const getComments = (id) => {
   commentRef.doc(id).collection("thisBlogComments").orderBy("created_at", "desc").limit(20).onSnapshot(snapshot => {
-    console.log(snapshot);
-    const mojUl = document.getElementById(id);
     const commentSection = document.querySelector(".commentSection")
     const forma = commentSection.querySelector(".commentForm");
     addCommentFormListener(forma, id);
-    console.log(snapshot.docs);
-
-    const listaKomentara = commentSection.querySelector(".commentsDisplay");
-
-    let changes = snapshot.docChanges().reverse();
-    changes.forEach(document => {
-      if (document.doc.data() == undefined) {
-        return;
-      }
-      if (document.type == "added") {
-        userRef.doc(document.doc.data().created_by_id).get().then(doc => {
-
-          const data = doc.data();
-          listaKomentara.insertAdjacentHTML('afterbegin', `<li class="commentElement grid"><img src="${(data && data.slika) ? data.slika : "cat.jpg"}" alt="#" class="pictureOnComment"><r>${data ? `${data.ime} ${data.prezime}` : "unknown"}</r><z>${document.doc.data().comment}</z></li>`);
-          // main.innerHTML += template;
-        });
-      }
-
-    })
+    renderComments(commentSection, snapshot);
   })
 }
 
@@ -163,8 +143,10 @@ blogList.addEventListener("click", e => {
   if (e.target.classList.contains("delete")) {
     const id = e.target.parentElement.getAttribute("id");
     const target = document.getElementById(id);
-    target.nextElementSibling.remove();
-    target.remove();
+    const parent = target.parentElement;
+    parent.nextElementSibling.remove();
+    parent.remove();
+
     blogRef.doc(id).delete();
     //like logic
   } else if (e.target.classList.contains("like")) {

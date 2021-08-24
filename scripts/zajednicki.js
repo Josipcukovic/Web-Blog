@@ -12,22 +12,55 @@ const addBlogPictureButton = document.getElementById("blogPhoto");
 const uid = function () {
     return Date.now().toString(36) + Math.random().toString(36).substr(1) + Math.random().toString(36).substr(1);
 }
+const loadingMessage = document.querySelector(".loadingMessage");
+const inputForPostImage = document.querySelector("#selectImage");
 
-addBlogPictureButton.addEventListener("change", e => {
-    const file = e.target.files[0];
-    const name = file.name;
-    const metadata = {
-        contentType: file.type,
-    };
-    const Storageref = storageDb.ref("Blog pictures/" + uid());
+inputForPostImage.addEventListener("click", e => {
+    var input = document.createElement("input");
+    input.type = "file";
+    input.click();
 
-    Storageref.child(name).put(file, metadata).then((snapshot) => snapshot.ref.getDownloadURL()).then((link) => {
-        ///dodaj postotak uploada
-        linkSlike = link;
-    });
+    input.onchange = e => {
+        const file = e.target.files[0];
+        const name = file.name;
+        const metadata = {
+            contentType: file.type,
+        };
+        const Storageref = storageDb.ref("Blog pictures/" + uid());
+
+        Storageref.child(name).put(file, metadata).then((snapshot) => {
+            // console.log((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+            loadingMessage.style.display = "block";
+            return snapshot.ref.getDownloadURL();
+        }).then((link) => {
+
+            loadingMessage.innerHTML = "Your picture is uploaded.";
+            linkSlike = link;
+        });
+    }
+})
 
 
-});
+
+
+// addBlogPictureButton.addEventListener("change", e => {
+//     const file = e.target.files[0];
+//     const name = file.name;
+//     const metadata = {
+//         contentType: file.type,
+//     };
+//     const Storageref = storageDb.ref("Blog pictures/" + uid());
+
+//     Storageref.child(name).put(file, metadata).then((snapshot) => {
+//         // console.log((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+//         loadingMessage.style.display = "block";
+//         return snapshot.ref.getDownloadURL();
+//     }).then((link) => {
+
+//         loadingMessage.innerHTML = "Your picture is uploaded.";
+//         linkSlike = link;
+//     });
+// });
 
 const putanja = window.location.pathname;
 
@@ -42,6 +75,10 @@ blogForm.addEventListener("submit", e => {
         alert("Congratz, you almost made a new post but please, You must login to make new posts");
         blogForm.reset();
         blogForm.parentElement.parentElement.parentElement.remove();
+        return;
+    }
+    if (!titleValue.trim() || !bodyValue.trim() || !linkSlike) {
+        alert("please fill in all the fields and choose post picture");
         return;
     }
     blogRef.add({
@@ -67,6 +104,8 @@ blogForm.addEventListener("submit", e => {
 
     linkSlike = null;
     blogForm.reset();
+    loadingMessage.style.display = "none";
+    loadingMessage.innerHTML = "Input the text of your blog here...";
 
 })
 
@@ -95,7 +134,33 @@ const addCommentFormListener = (forma, id) => {
         forma.reset();
     })
 }
+const renderComments = (commentSection, snapshot) => {
+    const listaKomentara = commentSection.querySelector(".commentsDisplay");
 
+    let changes = snapshot.docChanges().reverse();
+    changes.forEach(document => {
+        if (document.doc.data() == undefined) {
+            return;
+        }
+        if (document.type == "added") {
+
+            userRef.doc(document.doc.data().created_by_id).get().then(doc => {
+                const data = doc.data();
+                listaKomentara.insertAdjacentHTML
+                    ('afterbegin', `<li class="commentElement grid">
+                <img src="${(data && data.slika) ? data.slika : "cat.jpg"}" alt="#" class="pictureOnComment">
+                <div class="individualComment grid">
+                    <r>${data ? `${data.ime} ${data.prezime}` : "unknown"}</r>
+                    <z>${document.doc.data().comment}</z>
+                  </div>
+                  </li>`);
+            });
+
+        } else if (document.type == "removed") {
+            ///do nothing for now
+        }
+    })
+}
 
 let removeListener;
 ///prikazivanje komentara
@@ -119,31 +184,9 @@ const addComentListener = (commentShow, commentSection) => {
             var unsub = commentRef.doc(id).collection("thisBlogComments").orderBy("created_at", "desc").limit(20).onSnapshot(snapshot => {
                 const mojUl = document.getElementById(id);
                 const commentSection = mojUl.nextElementSibling;
-                console.log(snapshot.docs);
-
-                const listaKomentara = commentSection.querySelector(".commentsDisplay");
-
-                let changes = snapshot.docChanges().reverse();
-                changes.forEach(document => {
-                    if (document.doc.data() == undefined) {
-                        return;
-                    }
-                    if (document.type == "added") {
-
-                        userRef.doc(document.doc.data().created_by_id).get().then(doc => {
-
-                            const data = doc.data();
-                            listaKomentara.insertAdjacentHTML('afterbegin', `<li class="commentElement grid"><img src="${(data && data.slika) ? data.slika : "cat.jpg"}" alt="#" class="pictureOnComment"><r>${data ? `${data.ime} ${data.prezime}` : "unknown"}</r><z>${document.doc.data().comment}</z></li>`);
-                            // main.innerHTML += template;
-                        });
-
-
-                        // listaKomentara.insertAdjacentHTML('afterbegin', `<li class="commentElement grid"><img src="cat.jpg" alt="#" class="pictureOnComment"><z>${document.doc.data().comment}</z></li>`);
-                    } else if (document.type == "removed") {
-                        ///do nothing for now
-                    }
-                })
+                renderComments(commentSection, snapshot);
             })
+
             removeListener = unsub;
 
         }
@@ -166,7 +209,7 @@ function dohvatiKomentare(id) {
 
 
 //// moduli
-const button = document.querySelector("#newBlog");
+const buttonNewBlog = document.querySelector("#newBlog");
 const wrapper = document.querySelector(".wrapper");
 const popup = document.querySelectorAll(".popUp");
 
@@ -179,11 +222,16 @@ const wrapperRegister = document.querySelector(".wrapper-register");
 const wrapperLogin = document.querySelector(".wrapper-login");
 
 
-button.addEventListener("click", (e) => {
+buttonNewBlog.addEventListener("click", (e) => {
     wrapper.style.display = "block";
     //declared in auth.js
-    wrapperLogin.style.display = "none";
-    wrapperRegister.style.display = "none";
+    if (wrapperLogin) {
+        wrapperLogin.style.display = "none";
+    }
+    if (wrapperRegister) {
+        wrapperRegister.style.display = "none";
+    }
+
 
 });
 
@@ -230,7 +278,3 @@ if (wrapperRegister) {
         }
     });
 }
-
-
-
-
