@@ -47,7 +47,7 @@ blogRef.doc(id).get().then(document => {
     const blogTemplate = ` <li class="blog-list-element" id=${document.id}> 
   <img src="${ownerOfTheBlog ? (auth.currentUser.photoURL != null ? auth.currentUser.photoURL : "cat.jpg") : njegova}" alt="#" class="profilna">
     <p class ="author">Written by: ${ownerOfTheBlog ? "You" : data.created_by}</p>
-    <span>${data.title}</span>
+    <span class="titleOfPost">${data.title}</span>
     <img src="${data.picture != null ? data.picture : cat}" alt="#" class="blogPicture">
       <span class="dataBody">${data.body}</span> 
       <div class = "tooltip"> ${created_at.toLocaleDateString()} at ${created_at.toLocaleTimeString()} </div>

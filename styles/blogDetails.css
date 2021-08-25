@@ -1,3 +1,12 @@
+.nekaKlasa .report{
+  max-width: 30%;
+  margin: 0;
+  background-color: rgb(235, 211, 211);
+}
+.nekaKlasa #blog-list .blog-list-element {
+  max-width: 100%;
+}
+
 .commentsDisplay{
     padding-bottom: 10px;
     overflow-y: scroll;
@@ -52,4 +61,54 @@
 
   .report.show{
     display: block;
+  }
+
+  @media only screen and (max-width: 960px){
+    .nekaKlasa .report{
+      max-width: 40%;
+    }
+  }
+  @media only screen and (max-width: 800px) {
+    #blog-list .titleOfPost{
+      margin-top: 30px;
+    }
+    .nekaKlasa .report{
+      max-width: 50%;
+    }
+    li {
+        margin: 0;
+    }
+  }
+
+
+  
+  @media only screen and (max-width: 700px) {
+    #blog-list .titleOfPost{
+      margin-top: 30px;
+    }
+    #blog-list .blogPicture{
+      max-width: 60%;
+    }
+    .nekaKlasa{
+      max-width: 60%;
+    }
+    li {
+        margin: 0;
+    }
+  }
+
+
+  @media only screen and (max-width: 570px){
+    .nekaKlasa{
+      max-width: 80%;
+    }
+  }
+
+  @media only screen and (max-width: 370px){
+    .nekaKlasa{
+      max-width: 95%;
+    }
+    .nekaKlasa .report{
+      max-width: 60%;
+    }
   }

@@ -1,8 +1,7 @@
-.commentSection{
 
-    max-width: 70%;
+.yourPostsSmallScreen{
+  display: none;
 }
-
 .whole-profile-info .profile-content{
     grid-column: 1/5;
     grid-row: 1;
@@ -10,15 +9,13 @@
     /* display: inline-block; */
 }
 
-.whole-profile-info .lista{
+.blogContent{
   grid-column: 5/13;
     grid-row: 1;
     
 }
 
-.whole-profile-info .lista .blog-list-element{
- max-width: 70%;
-}
+
 
 
 .titles-on-profile-page .yourProfileInfo{
@@ -60,10 +57,157 @@ main{
 }
 
 
-#blog-list .blog-list-element{
-    max-width: 70%;
+#blog-list .blogPicture{
+  width: 50%;
 }
-
 .dataBody{
   word-wrap: break-word;
 }
+#selectProfileImage{
+  margin: 0px;
+  font-size: 1em;
+ 
+}
+
+@media only screen and (max-width: 960px){
+.profile-content {
+  padding-left: 10px;
+}
+}
+
+
+@media only screen and (max-width: 860px){
+  .blogContent{
+    grid-column: 1/13;
+    grid-row: 2;
+  }
+  .blogContent h2{
+    text-align: center;
+  }
+  .yourPosts{
+    display: none;
+  }
+  .yourPostsSmallScreen{
+    display: block;
+    margin: 0;
+  }
+
+  .titles-on-profile-page .yourProfileInfo{
+  grid-column: 1/13;
+}
+  .whole-profile-info .profile-content{
+    grid-column: 1/13;
+    text-align: center;
+    font-size: 1.05em;
+  }
+  #selectProfileImage{
+    text-align: center;
+  }
+  #profilePhoto{
+    font-size: 1em;
+  }
+  .mojaSlika{
+    width: 300px;
+    height: 300px;
+  }
+  .yourProfileInfo{
+    margin-bottom: 0px;
+  }
+
+
+  #selectProfileImage{
+    margin: 0px auto;
+    max-width: 40%;
+  }
+  #blog-list .blogPicture{
+    width: 60%;
+  }
+  }
+
+  @media only screen and (max-width: 700px){
+    .whole-profile-info .profile-content{
+      grid-column: 3/11;
+      
+    }
+  
+    #blog-list .blogPicture{
+      width: 60%;
+    }
+    .profile-content {
+      text-align: center;
+    }
+    #selectProfileImage{
+    
+      max-width: 50%;
+    }
+    #blog-list .blogPicture{
+      width: 70%;
+    }
+    }
+
+    @media only screen and (max-width: 570px){
+      .whole-profile-info .profile-content{
+        grid-column: 2/10;
+        text-align: initial;
+      }
+      .blogContent{
+        grid-column: 1/13;
+      }
+
+      #selectProfileImage{
+        margin: 0px;
+        max-width: 60%;
+      }
+      #blog-list .blogPicture{
+        height: 200px;
+      }
+    }
+
+    @media only screen and (max-width: 520px){
+      .whole-profile-info .profile-content{
+        grid-column: 1/12;
+        
+      }
+      #selectProfileImage{
+        
+        max-width: 65%;
+      }
+      .commentsDisplay{
+        padding-left: 0px;
+      }
+    }
+    @media only screen and (max-width: 430px){
+      
+      #selectProfileImage{
+        
+        max-width: 80%;
+      }
+      .mojaSlika{
+        width: 250px;
+        height: 250px;
+      }
+      /* #email{
+        margin: 0;
+      } */
+      .whole-profile-info .profile-content{
+        font-size: initial;
+      }
+      #blog-list .blogPicture{
+        max-width: 80%;
+      }
+    }
+
+    @media only screen and (max-width: 280px){
+      
+      #selectProfileImage{
+        
+        max-width: 80%;
+      }
+      .mojaSlika{
+        width: 200px;
+        height: 200px;
+      }
+      
+    }
+
+   

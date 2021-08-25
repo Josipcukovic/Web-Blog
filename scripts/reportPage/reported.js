@@ -45,6 +45,14 @@ blogList.addEventListener("click", e => {
     }
 })
 
+//mozda u posebni file posto koristi i zajdnicki i ovaj
+const toggleHamburgerButton = document.querySelector(".toggle-button");
+const navLinks = document.querySelector("#nav-links");
+
+
+toggleHamburgerButton.addEventListener("click", e => {
+    navLinks.classList.toggle("active");
+})
 // blogRef.orderBy('title_search').orderBy("created_at", "desc").startAt(term).endAt(term + '~').get().then(data => {
 //     let changes = data.docChanges().reverse();
 //     changes.forEach(blog => {

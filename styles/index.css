@@ -55,7 +55,7 @@ li{
   }
 #blog-list .blog-list-element{
     position: relative;
-    max-width: 50%;
+    max-width: 40%;
     margin: 0px auto;
     margin-top: 16px;
     border-bottom: 1px solid #e0e0e0;
@@ -78,7 +78,7 @@ li{
 
 .commentSection{
   position: relative;
-    max-width: 50%;
+    max-width: 40%;
     margin: 0px auto;
     border-bottom: 1px solid #e0e0e0;
     background-color: rgb(245, 244, 244);
@@ -110,10 +110,6 @@ li{
   cursor: pointer;
 }
 
-/* .showComment{
-  display: block;
-} */
-/*  */
 
 #blog-list .blogPicture{
     width: 30%;
@@ -160,9 +156,6 @@ a:hover{
     color: green;
 }
 
-/* main{
-    text-align: center;
-} */
 
 /* modals */
 .wrapper {
@@ -198,7 +191,7 @@ a:hover{
   
   .popUp {
     background: white;
-    width: 40%;
+    width: 30%;
     height: fit-content;
     border-radius: 5%;
     overflow-y: auto;
@@ -306,8 +299,7 @@ a:hover{
  }
 
 .commentElement z{
-  /* position: relative;
-  top: -20px; */
+ 
   padding-top: 25px;
   padding-left: 5px;
   grid-column: 1/13;
@@ -381,15 +373,7 @@ font-weight: bold;
   padding-bottom: 16px;
 }
 
-.nekaKlasa .report{
-  width: 30%;
-  margin: 0;
- /* bila je lightcolar */
-  background-color: rgb(235, 211, 211);
-}
-.nekaKlasa #blog-list .blog-list-element {
-  max-width: 100%;
-}
+
 
 .showElement{
   display: block;
@@ -428,7 +412,7 @@ font-weight: bold;
 }
 
 /* responzivnost */
-@media only screen and (max-width: 2100px) and (min-width: 1700px){
+@media only screen and (max-width: 2600px) and (min-width: 1700px){
   .prikaziBlogChildren, .noMorePostsMessage, .commentPost, .createdAt,  .individualComment,  .tooltip, .comment, #nav-links, .trazenjeBloga{
     font-size: 1.3em;
   }
@@ -440,6 +424,9 @@ font-weight: bold;
   #blog-list span{
     margin-bottom: 40px;
   }
+  #blog-list .blog-list-element{
+    max-width: 30%;
+  }
 }
 
 @media only screen and (max-width: 1125px){
@@ -449,9 +436,7 @@ font-weight: bold;
 }
 
 @media only screen and (max-width: 943px){
-  /* li{
-    margin: 0;
-  } */
+ 
   .NewBlog,.myProfile {
     margin: 0;
   }
@@ -461,12 +446,28 @@ font-weight: bold;
 .trazenjeBloga{
   transform: translate(-15px, 0px);
 }
+
+.wrapper, .wrapper-register, .wrapper-login{
+  z-index: 1;
+}
+
+.popUp{
+  margin: 20% auto;
+  width: 55%;
+}
+.addNewBlogForm input, button, textarea, .loginForm input, button, .registerForm input, button{
+  width: 65%;
+}
+
+.loginForm h2 {
+  margin-top: 0;
+}
 }
 
 @media only screen and (max-width: 800px){
   
   .prikaziBlogChildren, .noMorePostsMessage, .commentPost, .createdAt,  .individualComment,  .tooltip, .comment, #nav-links, .trazenjeBloga{
-    font-size: 1.3em;
+    font-size: 1.1em;
   }
   .commentPost{
     margin: 0;
@@ -487,37 +488,41 @@ font-weight: bold;
 nav a{
   grid-column: 2/5;
 }
-
-
+/* moduli */
+.addNewBlogForm input, button, textarea, .registerForm input, button, .loginForm input, button{
+  width: 80%;
 }
 
-@media only screen and (max-width: 760px){
-  .createdAt{
-   padding: 5px;
-    font-size: 1.2em;
-  }
-  #blog-list .blogPicture{
-    width: 60%;
-  }
-  #blog-list span{
-    margin: 0;
-  }
-  .commentPost{
-    position: relative;
-    padding: 5px;
-    right: 0;
-    font-size: 1.2em;
-  }
- 
-  li p{
-    position: relative;
-  }
+.commentPost{
+  position: relative;
+  padding: 5px;
+  right: 0;
+  font-size: 1.2em;
 }
 
-@media only screen and (max-width: 670px){
+li p{
+  position: relative;
+}
+#blog-list span{
+  margin: 0;
+}
+.createdAt{
+  padding: 5px;
+   font-size: 1.2em;
+ }
+ #blog-list .blogPicture{
+  width: 60%;
+}
+}
+
+
+@media only screen and (max-width: 700px){
  
   #blog-list .blogPicture{
     width: 80%;
+  }
+  .commentsDisplay{
+    padding: 0;
   }
   /* hamburger */
   .toggle-button{
@@ -545,11 +550,46 @@ nav a{
   .trazilica.active{
     display: block;
   }
+  nav a {
+    grid-column: 2/7;
+}
   .Logout{
     margin: 0;
   }
 }
 
+@media only screen and (max-width: 570px){
+  #blog-list .blog-list-element{
+    max-width: 80%;
+  }
+  .commentSection{
+    max-width: 80%;
+  }
+  #blog-list .blogPicture{
+    max-width: 70%;
+    height: 180px;
+  }
 
+  .popUp{
+   
+    width: 70%;
+  }
+}
 
+@media only screen and (max-width: 370px){
+  #blog-list .blog-list-element{
+    max-width: 90%;
+  }
+  .commentSection{
+    max-width: 90%;
+  }
+  
+  nav a {
+    grid-column: 2/9;
+}
+.popUp{
+ 
+  width: 95%;
+}
+}
 

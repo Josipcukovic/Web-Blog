@@ -17,7 +17,7 @@ blogRef.where("created_by_id", "==", id).orderBy("created_at", "asc").get().then
         const timeAgo = dateFns.distanceInWords(now, created_at.getTime(), { addSuffix: true });
 
         const blogTemplate = ` <li class="blog-list-element" id=${blog.id}> 
-          <p class ="author mojProfil">Written by: ${"Well, You"}</p>
+       
           <span>${data.title}</span>
           <img src="${data.picture != null ? data.picture : cat}" alt="#" class="blogPicture">
             <span class="dataBody">${data.body}</span> 
@@ -54,33 +54,69 @@ userRef.doc(id).get().then(doc => {
     // main.innerHTML += template;
 });
 
-profilePhoto.addEventListener("change", e => {
-    const currentUser = auth.currentUser;
-    const file = e.target.files[0];
-    const name = file.name;
-    const metadata = {
-        contentType: file.type,
-    };
-    const Storageref = storageDb.ref("Profile pictures/" + currentUser.uid);
+
+const changeProfilePictureButton = document.querySelector("#selectProfileImage");
+
+changeProfilePictureButton.addEventListener("click", e => {
+    var input = document.createElement("input");
+    input.type = "file";
+    input.click();
+
+    input.onchange = e => {
+        const currentUser = auth.currentUser;
+        const file = e.target.files[0];
+        const name = file.name;
+        const metadata = {
+            contentType: file.type,
+        };
+        const Storageref = storageDb.ref("Profile pictures/" + currentUser.uid);
 
 
-    reader = new FileReader();
-    reader.onload = () => {
-        myPhoto.src = reader.result;
+        reader = new FileReader();
+        reader.onload = () => {
+            myPhoto.src = reader.result;
+        }
+        reader.readAsDataURL(file);
+
+        Storageref.child(name).put(file, metadata).then((snapshot) => snapshot.ref.getDownloadURL()).then((link) => {
+            currentUser.updateProfile({ photoURL: link }).then(function () {
+                userRef.doc(currentUser.uid).update({
+                    slika: link
+                });
+                // location.reload();
+            }).catch(function (error) { window.alert(error.message) });
+        });
+
     }
-    reader.readAsDataURL(file);
+})
 
-    Storageref.child(name).put(file, metadata).then((snapshot) => snapshot.ref.getDownloadURL()).then((link) => {
-        currentUser.updateProfile({ photoURL: link }).then(function () {
-            userRef.doc(currentUser.uid).update({
-                slika: link
-            });
-            // location.reload();
-        }).catch(function (error) { window.alert(error.message) });
-    });
+// profilePhoto.addEventListener("change", e => {
+//     const currentUser = auth.currentUser;
+//     const file = e.target.files[0];
+//     const name = file.name;
+//     const metadata = {
+//         contentType: file.type,
+//     };
+//     const Storageref = storageDb.ref("Profile pictures/" + currentUser.uid);
 
 
-});
+//     reader = new FileReader();
+//     reader.onload = () => {
+//         myPhoto.src = reader.result;
+//     }
+//     reader.readAsDataURL(file);
+
+//     Storageref.child(name).put(file, metadata).then((snapshot) => snapshot.ref.getDownloadURL()).then((link) => {
+//         currentUser.updateProfile({ photoURL: link }).then(function () {
+//             userRef.doc(currentUser.uid).update({
+//                 slika: link
+//             });
+//             // location.reload();
+//         }).catch(function (error) { window.alert(error.message) });
+//     });
+
+
+// });
 
 
 
