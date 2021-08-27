@@ -305,6 +305,7 @@ a:hover{
   grid-column: 1/13;
   grid-row: 1;
   align-self: center;
+  word-wrap: break-word;
 }
 
 
@@ -331,13 +332,13 @@ text-align: center;
 font-weight: bold;
 }
 
-.trazilica{
+.searchForm{
   align-self: center;
   grid-column: 11/13;
   grid-row: 1;
 }
 
-.trazilica input {
+.searchForm input {
  outline: none;
  border-radius: 10px;
 
@@ -409,6 +410,7 @@ font-weight: bold;
   width: 100%;
   background-color: black;
   border-radius: 10px;
+  transition: all .5s ease-in-out;
 }
 
 /* responzivnost */
@@ -433,6 +435,7 @@ font-weight: bold;
   #blog-list .blogPicture{
       width: 40%;
     }
+    
 }
 
 @media only screen and (max-width: 943px){
@@ -476,7 +479,7 @@ font-weight: bold;
     margin: 0;
   }
   
-  .trazilica{
+  .searchForm{
     grid-column: 10/12;
   }
   .trazenjeBloga{
@@ -515,6 +518,23 @@ li p{
 }
 }
 
+@-webkit-keyframes fadeIn {
+  from { opacity: 0; }
+    to { opacity: 1; }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+    to { opacity: 1; }
+}
+@-webkit-keyframes fadeOut {
+  from { opacity: 1; }
+    to { opacity: 0; }
+}
+@keyframes fadeOut {
+  from { opacity: 1; }
+    to { opacity: 0; }
+}
+
 
 @media only screen and (max-width: 700px){
  
@@ -528,6 +548,19 @@ li p{
   .toggle-button{
     display: flex;
   }
+  /* burger u x */
+  .toggle-button.open .bar:nth-of-type(1){
+    transform: rotate(45deg) translate(0px, 16px);
+   }
+   .toggle-button.open .bar:nth-of-type(3){
+    transform: rotate(-45deg) translate(0px, -16px);
+   }
+
+  .toggle-button.open .bar:nth-of-type(2){
+    transform: translateX(-50px);
+    background: transparent;
+  }
+
   #nav-links{
     grid-row: 2; 
     grid-column: 4/9;
@@ -535,20 +568,25 @@ li p{
     text-align: center;
     display: none;
   }
-
+  
   #nav-links.active{
     display: flex;
+    -webkit-animation: fadeIn .5s;
+    animation: fadeIn .5s;
   }
+  
 
-  .trazilica{
+  .searchForm{
     grid-column: 4/10;
     grid-row: 3; 
     text-align: center;
     padding-bottom: 10px;
     display: none;
   }
-  .trazilica.active{
+  .searchForm.active{
     display: block;
+    -webkit-animation: fadeIn .5s;
+    animation: fadeIn .5s;
   }
   nav a {
     grid-column: 2/7;
@@ -586,6 +624,10 @@ li p{
   
   nav a {
     grid-column: 2/9;
+}
+li{
+  padding-left: 0;
+  margin: 0;
 }
 .popUp{
  

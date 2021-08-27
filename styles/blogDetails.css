@@ -62,6 +62,20 @@
   .report.show{
     display: block;
   }
+  @media only screen and (max-width: 1125px){
+    
+      .dislikeContainer{
+        margin-left: 27px;
+        grid-column: 8/13;
+      }
+      .likeContainer{
+        margin-left: 20px;
+        grid-column: 4/7;
+      }
+      #blog-list .titleOfPost{
+        margin-top: 30px;
+      }
+  }
 
   @media only screen and (max-width: 960px){
     .nekaKlasa .report{
@@ -69,8 +83,13 @@
     }
   }
   @media only screen and (max-width: 800px) {
-    #blog-list .titleOfPost{
-      margin-top: 30px;
+    .dislikeContainer{
+      margin-left: 15px;
+      grid-column: 9/13;
+    }
+    .likeContainer{
+      
+      grid-column: 3/7;
     }
     .nekaKlasa .report{
       max-width: 50%;
@@ -110,5 +129,9 @@
     }
     .nekaKlasa .report{
       max-width: 60%;
+    }
+    .dislikeContainer{
+      margin-left: 10px;
+      
     }
   }

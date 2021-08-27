@@ -11,7 +11,6 @@
     <title>Simple blog</title>
 </head>
 
-<!-- <button class="klikni">Klikni</button> -->
 
 <body>
     <header>
@@ -33,15 +32,12 @@
 
 
             </ul>
-            <form class="trazilica">
+            <form class="searchForm">
                 <input type="text" class="trazenjeBloga" name="searchBox" placeholder="Search by title..">
             </form>
         </nav>
     </header>
-    <!-- <input type="file" value="upload" id="photo" />
-    <img class="myImage" alt="#"> -->
 
-    <!-- <button class="getBack">Reset</button> -->
     <main>
         <ul id="blog-list"></ul>
         <p class="noMorePostsMessage">There are no more posts...</p>
@@ -55,9 +51,6 @@
 
                     <input type="text" name="title" placeholder="Title" required>
                     <button id="selectImage" type="button">Select image for your post</button>
-                    <!-- <button type="button" onclick="document.getElementById('blogPhoto').click()" required>Select your
-                        image</button> -->
-                    <!-- <input type="file" value="upload" id="blogPhoto" required /> -->
                     <p class="loadingMessage">Loading...</p>
                     <textarea name="body" placeholder="Input the text of your blog here..." required></textarea>
                     <button type="submit">Add Blog</button>
@@ -109,7 +102,6 @@
     <script src="scripts/registerAndLogin.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/date-fns/1.30.1/date_fns.min.js"></script>
     <script src="scripts/zajednicki.js"></script>
-    <!-- <script src="http://cdn.date-fns.org/v1.9.0/date_fns.min.js"></script> -->
     <script src="scripts/homePage/app.js"></script>
 </body>
 

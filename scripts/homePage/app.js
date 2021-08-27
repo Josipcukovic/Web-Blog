@@ -1,18 +1,21 @@
 var lastVisible;
 var next;
+let userUsedSearchForm = false;
 
-///show more data on scroll
-window.onscroll = function (ev) {
+const setPostsStartingPoint = (snapshot) => {
+    lastVisible = snapshot.docs[snapshot.docs.length - 1];
+    next = blogRef
+        .orderBy("created_at", "desc")
+        .startAfter(lastVisible)
+        .limit(5);
+}
 
-    if ((window.innerHeight + Math.ceil(window.pageYOffset)) >= document.body.offsetHeight + 16) {
-        console.log("tu");
+const getNextFivePosts = () => {
+    if (!userUsedSearchForm) {
         next.get().then(snapshot => {
-            lastVisible = snapshot.docs[snapshot.docs.length - 1];
-            next = blogRef
-                .orderBy("created_at", "desc")
-                .startAfter(lastVisible)
-                .limit(5);
-            console.log(lastVisible);
+
+            setPostsStartingPoint(snapshot);
+
             snapshot.forEach(item => {
 
                 renderBlogData(item, 'beforeend');
@@ -20,30 +23,38 @@ window.onscroll = function (ev) {
         }).catch(e => {
             document.querySelector(".noMorePostsMessage").style.display = "block";
         })
+    }
 
+}
+
+///show more data on scroll
+window.onscroll = function () {
+    if ((window.innerHeight + Math.ceil(window.pageYOffset)) >= document.body.offsetHeight + 16) {
+        getNextFivePosts();
     }
 };
 
+const getSearchedPosts = (term) => {
+    blogRef.orderBy('title_search').orderBy("created_at", "desc").startAt(term).endAt(term + '~').get().then(data => {
+        let changes = data.docChanges().reverse();
+        changes.forEach(blog => {
+            renderBlogData(blog.doc, 'afterbegin');
+        })
+    });
+}
 
 ///search for posts
-const searchBox = document.querySelector(".trazilica");
-searchBox.addEventListener("submit", e => {
+const searchForm = document.querySelector(".searchForm");
+searchForm.addEventListener("submit", e => {
     e.preventDefault();
-
-    let term = searchBox["searchBox"].value.toLowerCase().trim();
+    userUsedSearchForm = true;
+    let term = searchForm["searchBox"].value.toLowerCase().trim();
     if (!term.trim()) {
         return;
     } else {
         blogList.innerHTML = "";
     }
-    blogRef.orderBy('title_search').orderBy("created_at", "desc").startAt(term).endAt(term + '~').get().then(data => {
-        let changes = data.docChanges().reverse();
-        changes.forEach(blog => {
-
-            renderBlogData(blog.doc, 'afterbegin');
-
-        })
-    });
+    getSearchedPosts(term);
 })
 
 
@@ -51,54 +62,51 @@ searchBox.addEventListener("submit", e => {
 ////listener
 blogRef.orderBy("created_at", "desc").limit(5).get().then(snapshot => {
     let changes = snapshot.docChanges().reverse();
-
-    lastVisible = snapshot.docs[snapshot.docs.length - 1];
-
-    next = blogRef
-        .orderBy("created_at", "desc")
-        .startAfter(lastVisible)
-        .limit(3);
+    setPostsStartingPoint(snapshot);
 
     changes.forEach(doc => {
-
         if (doc.type == "added") {
             renderBlogData(doc.doc, 'afterbegin');
-
         }
     })
 })
 
-///brisanje i dodavanje komentara
+const deletePost = (postId) => {
+    const target = document.getElementById(postId);
+    target.nextElementSibling.remove();
+    target.remove();
+    blogRef.doc(postId).delete();
+}
+
+const showPostDetails = (postId) => {
+    localStorage.setItem("id", postId);
+    window.location.href = "blogDetails.html";
+}
+///brisanje objava i dodavanje komentara
 blogList.addEventListener("click", e => {
     e.preventDefault();
+    const postId = e.target.parentElement.getAttribute("id");
 
     if (e.target.classList.contains("delete")) {
-        const id = e.target.parentElement.getAttribute("id");
-        const target = document.getElementById(id);
-        target.nextElementSibling.remove();
-        target.remove();
-        blogRef.doc(id).delete();
+        deletePost(postId);
 
     } else if (e.target.classList.contains("prikaziBlog")) {
-        const id = e.target.parentElement.getAttribute("id");
-        console.log(e.target);
-        localStorage.setItem("id", id);
-        window.location.href = "blogDetails.html";
+        showPostDetails(postId);
+
     } else if (e.target.classList.contains("prikaziBlogChildren")) {
-        const id = e.target.parentElement.parentElement.getAttribute("id");
-        console.log(e.target);
-        localStorage.setItem("id", id);
-        window.location.href = "blogDetails.html";
-        ////like logic
+        const postId = e.target.parentElement.parentElement.getAttribute("id");
+        showPostDetails(postId);
     }
 })
 
 
-const link = document.querySelector(".myProfile");
-
-link.addEventListener("click", e => {
-    console.log(e.target);
+const myProfileLink = document.querySelector(".myProfile");
+const showUserProfile = () => {
     localStorage.setItem("id", auth.currentUser.uid);
     window.location.href = "myProfile.html";
+}
+
+myProfileLink.addEventListener("click", e => {
+    showUserProfile();
 });
 

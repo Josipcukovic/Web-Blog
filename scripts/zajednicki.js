@@ -8,12 +8,33 @@ const cat = "cat.jpg"
 const blogList = document.querySelector("#blog-list");
 const addBlogPictureButton = document.getElementById("blogPhoto");
 
-
+const isUserLoggedOut = () => {
+    return (auth.currentUser == null);
+}
 const uid = function () {
     return Date.now().toString(36) + Math.random().toString(36).substr(1) + Math.random().toString(36).substr(1);
 }
+
 const loadingMessage = document.querySelector(".loadingMessage");
 const inputForPostImage = document.querySelector("#selectImage");
+
+const handleBlogPicture = (e) => {
+    const file = e.target.files[0];
+    const name = file.name;
+    const metadata = {
+        contentType: file.type,
+    };
+    const Storageref = storageDb.ref("Blog pictures/" + uid());
+    loadingMessage.style.display = "block";
+    Storageref.child(name).put(file, metadata).then((snapshot) => {
+
+        return snapshot.ref.getDownloadURL();
+    }).then((link) => {
+
+        loadingMessage.innerHTML = "Your picture is uploaded.";
+        linkSlike = link;
+    });
+}
 
 inputForPostImage.addEventListener("click", e => {
     var input = document.createElement("input");
@@ -21,57 +42,52 @@ inputForPostImage.addEventListener("click", e => {
     input.click();
 
     input.onchange = e => {
-        const file = e.target.files[0];
-        const name = file.name;
-        const metadata = {
-            contentType: file.type,
-        };
-        const Storageref = storageDb.ref("Blog pictures/" + uid());
-
-        Storageref.child(name).put(file, metadata).then((snapshot) => {
-            // console.log((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
-            loadingMessage.style.display = "block";
-            return snapshot.ref.getDownloadURL();
-        }).then((link) => {
-
-            loadingMessage.innerHTML = "Your picture is uploaded.";
-            linkSlike = link;
-        });
+        handleBlogPicture(e);
     }
 })
 
+const getLastPost = async () => {
+    blogRef.orderBy("created_at", "desc").limit(1).get().then(snapshot => {
+        let changes = snapshot.docChanges().reverse();
 
+        changes.forEach(doc => {
+            renderBlogData(doc.doc, 'afterbegin');
+        })
+    }).catch(e => {
 
+    });
+}
 
-// addBlogPictureButton.addEventListener("change", e => {
-//     const file = e.target.files[0];
-//     const name = file.name;
-//     const metadata = {
-//         contentType: file.type,
-//     };
-//     const Storageref = storageDb.ref("Blog pictures/" + uid());
+const addBlogToDatabase = async (titleValue, bodyValue, linkSlike) => {
+    const now = new Date();
+    await blogRef.add({
+        title: titleValue.trim(),
+        title_search: titleValue.toLowerCase().trim(),
+        body: bodyValue.trim(),
+        created_at: firebase.firestore.Timestamp.fromDate(now),
+        created_by: auth.currentUser.displayName,
+        created_by_id: auth.currentUser.uid,
+        picture: linkSlike
+    })
+    getLastPost();
+}
 
-//     Storageref.child(name).put(file, metadata).then((snapshot) => {
-//         // console.log((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
-//         loadingMessage.style.display = "block";
-//         return snapshot.ref.getDownloadURL();
-//     }).then((link) => {
-
-//         loadingMessage.innerHTML = "Your picture is uploaded.";
-//         linkSlike = link;
-//     });
-// });
-
+const resetBlogFormValues = () => {
+    linkSlike = null;
+    blogForm.reset();
+    loadingMessage.style.display = "none";
+    loadingMessage.innerHTML = "Input the text of your blog here...";
+}
 const putanja = window.location.pathname;
 
 ///dodavanje novog bloga
 blogForm.addEventListener("submit", e => {
     e.preventDefault();
-    const now = new Date();
+
     const titleValue = blogForm["title"].value;
     const bodyValue = blogForm["body"].value;
-    if (auth.currentUser == null) {
-        ////none registrated user wants to make a new post
+
+    if (isUserLoggedOut()) {
         alert("Congratz, you almost made a new post but please, You must login to make new posts");
         blogForm.reset();
         blogForm.parentElement.parentElement.parentElement.remove();
@@ -81,80 +97,63 @@ blogForm.addEventListener("submit", e => {
         alert("please fill in all the fields and choose post picture");
         return;
     }
-    blogRef.add({
-        title: titleValue.trim(),
-        title_search: titleValue.toLowerCase().trim(),
-        body: bodyValue.trim(),
-        created_at: firebase.firestore.Timestamp.fromDate(now),
-        created_by: auth.currentUser.displayName,
-        created_by_id: auth.currentUser.uid,
-        picture: linkSlike
-    });
-    ////get new one
-    if (putanja == "/index.html") {
-        blogRef.orderBy("created_at", "desc").limit(1).get().then(snapshot => {
-            let changes = snapshot.docChanges().reverse();
-
-            changes.forEach(doc => {
-                renderBlogData(doc.doc, 'afterbegin');
-            })
-        });
-    }
-
-
-    linkSlike = null;
-    blogForm.reset();
-    loadingMessage.style.display = "none";
-    loadingMessage.innerHTML = "Input the text of your blog here...";
-
+    addBlogToDatabase(titleValue, bodyValue, linkSlike);
+    resetBlogFormValues();
 })
 
 function toggleTimeCreated() {
     event.target.previousElementSibling.classList.toggle("timeCreated");
 }
 
+const resetFormInputs = (form) => {
+    form.reset();
+}
+
+const addCommentToDatabase = (comment, blogId) => {
+    const now = new Date();
+    commentRef.doc(blogId).collection("thisBlogComments").add({
+        comment,
+        created_at: firebase.firestore.Timestamp.fromDate(now),
+        created_by_id: auth.currentUser.uid
+    })
+}
+
 const addCommentFormListener = (forma, id) => {
     forma.addEventListener("submit", e => {
         e.preventDefault();
         const comment = forma.querySelector(".comment").value;
-        const now = new Date();
+
         if (comment.trim() == "") {
-            forma.reset();
+            resetFormInputs(forma);
             return;
-        } else if (auth.currentUser == null) {
+        } else if (isUserLoggedOut()) {
             alert("You must login to comment");
-            forma.reset();
+            resetFormInputs(forma);
             return;
         }
-        commentRef.doc(id).collection("thisBlogComments").add({
-            comment,
-            created_at: firebase.firestore.Timestamp.fromDate(now),
-            created_by_id: auth.currentUser.uid
-        })
-        forma.reset();
+        addCommentToDatabase(comment, id);
+        resetFormInputs(forma);
     })
 }
-const renderComments = (commentSection, snapshot) => {
-    const listaKomentara = commentSection.querySelector(".commentsDisplay");
+const renderUserInfoOnComments = (commentsDisplaySection, commentData) => {
+    userRef.doc(commentData.doc.data().created_by_id).get().then(doc => {
+        const data = doc.data();
+        commentsDisplaySection.insertAdjacentHTML
+            ('afterbegin', `<li class="commentElement grid">
+        <img src="${(data && data.slika) ? data.slika : "cat.jpg"}" alt="#" class="pictureOnComment">
+        <div class="individualComment grid">
+            <r>${data ? `${data.ime} ${data.prezime}` : "unknown"}</r>
+            <z>${commentData.doc.data().comment}</z>
+          </div>
+          </li>`);
+    });
+}
 
-    let changes = snapshot.docChanges().reverse();
-    changes.forEach(document => {
-        if (document.doc.data() == undefined) {
-            return;
-        }
-        if (document.type == "added") {
-
-            userRef.doc(document.doc.data().created_by_id).get().then(doc => {
-                const data = doc.data();
-                listaKomentara.insertAdjacentHTML
-                    ('afterbegin', `<li class="commentElement grid">
-                <img src="${(data && data.slika) ? data.slika : "cat.jpg"}" alt="#" class="pictureOnComment">
-                <div class="individualComment grid">
-                    <r>${data ? `${data.ime} ${data.prezime}` : "unknown"}</r>
-                    <z>${document.doc.data().comment}</z>
-                  </div>
-                  </li>`);
-            });
+const processCommentData = (comments, commentsDisplaySection) => {
+    comments.forEach(commentData => {
+        if (commentData.doc.data() == undefined) return;
+        if (commentData.type == "added") {
+            renderUserInfoOnComments(commentsDisplaySection, commentData);
 
         } else if (document.type == "removed") {
             ///do nothing for now
@@ -162,46 +161,49 @@ const renderComments = (commentSection, snapshot) => {
     })
 }
 
-let removeListener;
+const renderComments = (commentSection, snapshot) => {
+    const commentsDisplaySection = commentSection.querySelector(".commentsDisplay");
+    let changes = snapshot.docChanges().reverse();
+    processCommentData(changes, commentsDisplaySection);
+}
+
+let removeCommentListener;
+
+
 ///prikazivanje komentara
-const addComentListener = (commentShow, commentSection) => {
+const addCommentListener = (commentShow, commentSection) => {
     commentShow.addEventListener("click", e => {
         if (commentSection.classList.contains("showComment")) {
-
             commentSection.classList.remove("showComment");
-            console.log(event.target.parentElement);
             const commentList = event.target.parentElement.nextElementSibling.querySelector(".commentsDisplay");
-
             commentList.innerHTML = "";
-            removeListener();
+            removeCommentListener();
 
         } else {
 
             commentSection.classList.add("showComment");
-            const id = event.target.parentElement.getAttribute("id");
-
-
-            var unsub = commentRef.doc(id).collection("thisBlogComments").orderBy("created_at", "desc").limit(20).onSnapshot(snapshot => {
-                const mojUl = document.getElementById(id);
-                const commentSection = mojUl.nextElementSibling;
+            const postId = event.target.parentElement.getAttribute("id");
+            var unsub = commentRef.doc(postId).collection("thisBlogComments").orderBy("created_at", "desc").limit(20).onSnapshot(snapshot => {
+                const post = document.getElementById(postId);
+                const commentSection = post.nextElementSibling;
                 renderComments(commentSection, snapshot);
             })
 
-            removeListener = unsub;
+            removeCommentListener = unsub;
 
         }
     })
 }
 
-function dohvatiKomentare(id) {
+function dohvatiKomentare(postId) {
 
-    const mojUl = document.getElementById(id);
-    const forma = mojUl.nextElementSibling.querySelector(".commentForm");
-    const commentSection = mojUl.nextElementSibling;
-    const commentShow = mojUl.querySelector(".commentPost");
+    const post = document.getElementById(postId);
+    const forma = post.nextElementSibling.querySelector(".commentForm");
+    const commentSection = post.nextElementSibling;
+    const commentShow = post.querySelector(".commentPost");
 
-    addCommentFormListener(forma, id);
-    addComentListener(commentShow, commentSection);
+    addCommentFormListener(forma, postId);
+    addCommentListener(commentShow, commentSection);
 
 
 }
@@ -283,12 +285,12 @@ if (wrapperRegister) {
 
 const toggleHamburgerButton = document.querySelector(".toggle-button");
 const navLinks = document.querySelector("#nav-links");
-const searchBoxy = document.querySelector(".trazilica");
+const searchBoxy = document.querySelector(".searchForm");
 
 toggleHamburgerButton.addEventListener("click", e => {
     navLinks.classList.toggle("active");
     if (searchBoxy) {
         searchBoxy.classList.toggle("active");
     }
-
+    toggleHamburgerButton.classList.toggle("open");
 })
