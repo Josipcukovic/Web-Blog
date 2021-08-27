@@ -38,7 +38,7 @@ const renderBlogData = (document, stackOrder) => {
 
   blogList.insertAdjacentHTML(stackOrder, blogTemplate);
   if (putanja != "/reportedStuff.html" && putanja != "/reportedstuff") {
-    dohvatiKomentare(document.id);
+    handleComments(document.id);
   };
 
 

@@ -79,7 +79,7 @@ const deletePost = (postId) => {
 }
 
 const showPostDetails = (postId) => {
-    localStorage.setItem("id", postId);
+    localStorage.setItem("postId", postId);
     window.location.href = "blogDetails.html";
 }
 ///brisanje objava i dodavanje komentara
@@ -101,12 +101,12 @@ blogList.addEventListener("click", e => {
 
 
 const myProfileLink = document.querySelector(".myProfile");
-const showUserProfile = () => {
-    localStorage.setItem("id", auth.currentUser.uid);
+const openUserProfile = () => {
+    localStorage.setItem("userId", auth.currentUser.uid);
     window.location.href = "myProfile.html";
 }
 
 myProfileLink.addEventListener("click", e => {
-    showUserProfile();
+    openUserProfile();
 });
 

@@ -1,24 +1,18 @@
-const id = localStorage.getItem("id");
-console.log(id);
+const postId = localStorage.getItem("postId");
 const reportButton = document.querySelector(".report");
 
-function toggleTimeCreated() {
-  event.target.previousElementSibling.classList.toggle("timeCreated");
-}
-
-
-const getComments = (id) => {
-  commentRef.doc(id).collection("thisBlogComments").orderBy("created_at", "desc").limit(20).onSnapshot(snapshot => {
+const getComments = (postId) => {
+  commentRef.doc(postId).collection("thisBlogComments").orderBy("created_at", "desc").onSnapshot(snapshot => {
     const commentSection = document.querySelector(".commentSection")
     const forma = commentSection.querySelector(".commentForm");
-    addCommentFormListener(forma, id);
+    addCommentFormListener(forma, postId);
     renderComments(commentSection, snapshot);
   })
 }
 
 
 ///dohvati blog
-blogRef.doc(id).get().then(document => {
+blogRef.doc(postId).get().then(document => {
   const data = document.data();
   const created_at = data.created_at.toDate();
   const now = new Date().getTime();
@@ -84,26 +78,30 @@ blogRef.doc(id).get().then(document => {
 let unsubLikes = null;
 let unsubDislikes = null;
 
-function getLikes() {
-
-  const likeRef2 = db.collection("likes").doc(id).collection("likedBy");
-  const dislikeRef = db.collection("dislikes").doc(id).collection("dislikedBy");
-
-  unsubLikes = likeRef2.onSnapshot((doc) => {
-    ///kako dobiti broj lajkova
-    console.log("liked", doc.size);
-    const likeNumber = document.querySelector(".like-number");
-    likeNumber.innerHTML = doc.size;
-
-  })
-
+const getDislikes = () => {
+  const dislikeRef = db.collection("dislikes").doc(postId).collection("dislikedBy");
   unsubDislikes = dislikeRef.onSnapshot((doc) => {
-    ///kako dobiti broj lajkova
-    console.log("disliked", doc.size);
     const dislikeNumber = document.querySelector(".dislike-number");
     dislikeNumber.innerHTML = doc.size;
 
   })
+}
+
+function getLikes() {
+
+  const likeRef = db.collection("likes").doc(postId).collection("likedBy");
+  unsubLikes = likeRef.onSnapshot((doc) => {
+    const likeNumber = document.querySelector(".like-number");
+    likeNumber.innerHTML = doc.size;
+
+  })
+  getDislikes();
+
+}
+
+const openUserProfile = () => {
+  localStorage.setItem("userId", auth.currentUser.uid);
+  window.location.href = "myProfile.html";
 }
 
 const link = document.querySelector(".myProfile");
@@ -115,9 +113,7 @@ link.addEventListener("click", e => {
   if (unsubDislikes != null) {
     unsubDislikes();
   }
-  console.log(e.target);
-  localStorage.setItem("id", auth.currentUser.uid);
-  window.location.href = "myProfile.html";
+  openUserProfile();
 });
 
 
@@ -151,21 +147,21 @@ blogList.addEventListener("click", e => {
     //like logic
   } else if (e.target.classList.contains("like")) {
     const likeRef = db.collection("likes");
-    const dislikeRef = db.collection("dislikes").doc(id).collection("dislikedBy").doc(auth.currentUser.uid);
+    const dislikeRef = db.collection("dislikes").doc(postId).collection("dislikedBy").doc(auth.currentUser.uid);
     handleLikesAndDislikes(dislikeRef);
 
-    likeRef.doc(id).collection("likedBy").doc(auth.currentUser.uid).set({
+    likeRef.doc(postId).collection("likedBy").doc(auth.currentUser.uid).set({
       likedby: auth.currentUser.uid
     })
 
     //dislike logic
   } else if (e.target.classList.contains("dislike")) {
     const dislikeRef = db.collection("dislikes");
-    console.log(id, auth.currentUser.uid);
-    const likeRef = db.collection("likes").doc(id).collection("likedBy").doc(auth.currentUser.uid);;
+    console.log(postId, auth.currentUser.uid);
+    const likeRef = db.collection("likes").doc(postId).collection("likedBy").doc(auth.currentUser.uid);;
     handleLikesAndDislikes(likeRef);
 
-    dislikeRef.doc(id).collection("dislikedBy").doc(auth.currentUser.uid).set({
+    dislikeRef.doc(postId).collection("dislikedBy").doc(auth.currentUser.uid).set({
       dislikedby: auth.currentUser.uid
     })
   }
@@ -177,7 +173,7 @@ const reportsRef = db.collection("reports");
 
 reportButton.addEventListener("click", e => {
 
-  reportsRef.doc(id).get().then((doc) => {
+  reportsRef.doc(postId).get().then((doc) => {
 
     if (doc.exists) {
       console.log("Document data:", doc.data());

@@ -1,16 +1,13 @@
-const id = localStorage.getItem("id");
-console.log(id);
+const userId = localStorage.getItem("userId");
+console.log(userId);
 
 const userRef = db.collection("users");
 const profilePhoto = document.querySelector("#profilePhoto");
 const myPhoto = document.querySelector(".mojaSlika");
 const main = document.querySelector("main");
 
-blogRef.where("created_by_id", "==", id).orderBy("created_at", "asc").get().then(blogs => {
-    // console.log(auth.currentUser.displayName);
-    // const data = document.data();
+blogRef.where("created_by_id", "==", userId).orderBy("created_at", "asc").get().then(blogs => {
     blogs.docs.forEach(blog => {
-        console.log(blog.data());
         const data = blog.data();
         const created_at = data.created_at.toDate();
         const now = new Date().getTime();
@@ -35,13 +32,13 @@ blogRef.where("created_by_id", "==", id).orderBy("created_at", "asc").get().then
             <ul class="commentsDisplay"> </ul>
             </div> `
         blogList.insertAdjacentHTML('afterbegin', blogTemplate);
-        dohvatiKomentare(blog.id);
+        handleComments(blog.id);
     })
 
 
 });
 
-userRef.doc(id).get().then(doc => {
+userRef.doc(userId).get().then(doc => {
     console.log(doc.data());
     const data = doc.data();
     const link = "cat.jpg"
