@@ -8,7 +8,7 @@ reportsRef.get().then((doc) => {
     doc.forEach(item => {
         const data = item.data();
         blogRef.doc(data.reportedId).get().then(data => {
-            renderBlogData(data, 'afterbegin');
+            renderBlogData(data, 'afterbegin', "reportedStuff");
         })
 
     })

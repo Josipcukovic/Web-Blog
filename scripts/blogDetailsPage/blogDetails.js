@@ -30,16 +30,16 @@ blogRef.doc(postId).get().then(document => {
         njegova = userData.slika;
       }
       else {
-        njegova = "cat.jpg";
+        njegova = "userPic.png";
       }
     }
     else {
-      njegova = "cat.jpg";
+      njegova = "userPic.png";
     }
 
     const deleteTemplate = `<div class='delete' >X</div>`;
     const blogTemplate = ` <li class="blog-list-element" id=${document.id}> 
-  <img src="${ownerOfTheBlog ? (auth.currentUser.photoURL != null ? auth.currentUser.photoURL : "cat.jpg") : njegova}" alt="#" class="profilna">
+  <img src="${ownerOfTheBlog ? (auth.currentUser.photoURL != null ? auth.currentUser.photoURL : "userPic.png") : njegova}" alt="#" class="profilna">
     <p class ="author">Written by: ${ownerOfTheBlog ? "You" : data.created_by}</p>
     <span class="titleOfPost">${data.title}</span>
     <img src="${data.picture != null ? data.picture : cat}" alt="#" class="blogPicture">
@@ -132,7 +132,6 @@ const handleLikesAndDislikes = (path) => {
 
 
 
-
 //deleting
 blogList.addEventListener("click", e => {
   e.preventDefault();
@@ -146,6 +145,7 @@ blogList.addEventListener("click", e => {
     blogRef.doc(id).delete();
     //like logic
   } else if (e.target.classList.contains("like")) {
+    if (!auth.currentUser) return alert("You must be logged in to like this post");
     const likeRef = db.collection("likes");
     const dislikeRef = db.collection("dislikes").doc(postId).collection("dislikedBy").doc(auth.currentUser.uid);
     handleLikesAndDislikes(dislikeRef);
@@ -156,8 +156,8 @@ blogList.addEventListener("click", e => {
 
     //dislike logic
   } else if (e.target.classList.contains("dislike")) {
+    if (!auth.currentUser) return alert("You must be logged in to dislike this post");
     const dislikeRef = db.collection("dislikes");
-    console.log(postId, auth.currentUser.uid);
     const likeRef = db.collection("likes").doc(postId).collection("likedBy").doc(auth.currentUser.uid);;
     handleLikesAndDislikes(likeRef);
 
@@ -168,23 +168,22 @@ blogList.addEventListener("click", e => {
 })
 
 ////reporting
-
 const reportsRef = db.collection("reports");
 
 reportButton.addEventListener("click", e => {
-
+  console.log(postId);
   reportsRef.doc(postId).get().then((doc) => {
-
+    console.log(doc);
     if (doc.exists) {
       console.log("Document data:", doc.data());
-      reportsRef.doc(id).set({
-        reportedId: id,
-        reportedTimes: (doc.data().reportedTimes ? doc.data().reportedTimes + 1 : 0)
-      });
+      // reportsRef.doc(id).set({
+      //   reportedId: id,
+      //   reportedTimes: (doc.data().reportedTimes ? doc.data().reportedTimes + 1 : 0)
+      // });
 
     } else {
-      reportsRef.doc(id).set({
-        reportedId: id,
+      reportsRef.doc(postId).set({
+        reportedId: postId,
         reportedTimes: 1
       });
     }

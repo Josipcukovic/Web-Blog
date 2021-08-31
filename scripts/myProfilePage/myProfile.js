@@ -41,7 +41,7 @@ blogRef.where("created_by_id", "==", userId).orderBy("created_at", "asc").get().
 userRef.doc(userId).get().then(doc => {
     console.log(doc.data());
     const data = doc.data();
-    const link = "cat.jpg"
+    const link = "userPic.png"
     const name = document.querySelector("#name");
     const email = document.querySelector("#email");
 

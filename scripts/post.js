@@ -48,14 +48,19 @@ const getLastPost = async () => {
     });
 }
 
+
+
 const addBlogToDatabase = async (titleValue, bodyValue, linkSlike) => {
+    const createdBy = await (auth.currentUser.displayName ? auth.currentUser.displayName : userRef.doc(auth.currentUser.uid).get().then(userData => {
+        return `${userData.data().ime} ${userData.data().prezime}`
+    }))
     const now = new Date();
     await blogRef.add({
         title: titleValue.trim(),
         title_search: titleValue.toLowerCase().trim(),
         body: bodyValue.trim(),
         created_at: firebase.firestore.Timestamp.fromDate(now),
-        created_by: auth.currentUser.displayName,
+        created_by: createdBy,
         created_by_id: auth.currentUser.uid,
         picture: linkSlike
     })
@@ -68,7 +73,7 @@ const resetBlogFormValues = () => {
     loadingMessage.style.display = "none";
     loadingMessage.innerHTML = "Input the text of your blog here...";
 }
-const putanja = window.location.pathname;
+
 
 ///dodavanje novog bloga
 blogForm.addEventListener("submit", e => {
@@ -126,11 +131,12 @@ const addCommentFormListener = (forma, id) => {
     })
 }
 const renderUserInfoOnComments = (commentsDisplaySection, commentData) => {
+
     userRef.doc(commentData.doc.data().created_by_id).get().then(doc => {
         const data = doc.data();
         commentsDisplaySection.insertAdjacentHTML
             ('afterbegin', `<li class="commentElement grid">
-        <img src="${(data && data.slika) ? data.slika : "cat.jpg"}" alt="#" class="pictureOnComment">
+        <img src="${(data && data.slika) ? data.slika : "userPic.png"}" alt="#" class="pictureOnComment">
         <div class="individualComment grid">
             <r>${data ? `${data.ime} ${data.prezime}` : "unknown"}</r>
             <z>${commentData.doc.data().comment}</z>

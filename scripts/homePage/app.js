@@ -18,7 +18,7 @@ const getNextFivePosts = () => {
 
             snapshot.forEach(item => {
 
-                renderBlogData(item, 'beforeend');
+                renderBlogData(item, 'beforeend', "index");
             })
         }).catch(e => {
             document.querySelector(".noMorePostsMessage").style.display = "block";
@@ -38,7 +38,7 @@ const getSearchedPosts = (term) => {
     blogRef.orderBy('title_search').orderBy("created_at", "desc").startAt(term).endAt(term + '~').get().then(data => {
         let changes = data.docChanges().reverse();
         changes.forEach(blog => {
-            renderBlogData(blog.doc, 'afterbegin');
+            renderBlogData(blog.doc, 'afterbegin', "index");
         })
     });
 }
