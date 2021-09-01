@@ -1,54 +1,24 @@
 const userId = localStorage.getItem("userId");
-console.log(userId);
 
 const userRef = db.collection("users");
-const profilePhoto = document.querySelector("#profilePhoto");
-const myPhoto = document.querySelector(".mojaSlika");
-const main = document.querySelector("main");
+const myPhoto = document.querySelector(".profile-picture");
+
 
 blogRef.where("created_by_id", "==", userId).orderBy("created_at", "asc").get().then(blogs => {
     blogs.docs.forEach(blog => {
-        const data = blog.data();
-        const created_at = data.created_at.toDate();
-        const now = new Date().getTime();
-        const timeAgo = dateFns.distanceInWords(now, created_at.getTime(), { addSuffix: true });
-
-        const blogTemplate = ` <li class="blog-list-element" id=${blog.id}> 
-       
-          <span>${data.title}</span>
-          <img src="${data.picture != null ? data.picture : cat}" alt="#" class="blogPicture">
-            <span class="dataBody">${data.body}</span> 
-            <div class = "tooltip"> ${created_at.toLocaleDateString()} at ${created_at.toLocaleTimeString()} </div>
-            <p class="createdAt" onmouseover="toggleTimeCreated()" onmouseleave="toggleTimeCreated()"> ${timeAgo} </p> 
-            <p class="commentPost">Comment this post</p>
-            <div class='delete' >X</div>
-
-            </li> 
-
-            <div class ="commentSection" >
-            <form class="commentForm">
-              <input type="text" name="comment" placeholder="Your comment..." class="comment">
-            </form>
-            <ul class="commentsDisplay"> </ul>
-            </div> `
-        blogList.insertAdjacentHTML('afterbegin', blogTemplate);
-        handleComments(blog.id);
+        renderBlogData(blog, 'afterbegin', 'myProfile');
     })
-
-
 });
 
 userRef.doc(userId).get().then(doc => {
-    console.log(doc.data());
     const data = doc.data();
-    const link = "userPic.png"
+    const defaultPicture = "../img/userPic.png"
     const name = document.querySelector("#name");
     const email = document.querySelector("#email");
 
     name.innerHTML = `Your name: ${data.ime} ${data.prezime}`;
-    myPhoto.src = auth.currentUser.photoURL != null ? auth.currentUser.photoURL : link;
+    myPhoto.src = auth.currentUser.photoURL != null ? auth.currentUser.photoURL : defaultPicture;
     email.innerHTML = `Your email: ${data.email}`;
-    // main.innerHTML += template;
 });
 
 
@@ -87,46 +57,17 @@ changeProfilePictureButton.addEventListener("click", e => {
     }
 })
 
-// profilePhoto.addEventListener("change", e => {
-//     const currentUser = auth.currentUser;
-//     const file = e.target.files[0];
-//     const name = file.name;
-//     const metadata = {
-//         contentType: file.type,
-//     };
-//     const Storageref = storageDb.ref("Profile pictures/" + currentUser.uid);
-
-
-//     reader = new FileReader();
-//     reader.onload = () => {
-//         myPhoto.src = reader.result;
-//     }
-//     reader.readAsDataURL(file);
-
-//     Storageref.child(name).put(file, metadata).then((snapshot) => snapshot.ref.getDownloadURL()).then((link) => {
-//         currentUser.updateProfile({ photoURL: link }).then(function () {
-//             userRef.doc(currentUser.uid).update({
-//                 slika: link
-//             });
-//             // location.reload();
-//         }).catch(function (error) { window.alert(error.message) });
-//     });
-
-
-// });
-
-
-
-//deleting blogs logic, declared in zajednicki.js
-
+const handlePostDelete = (postId) => {
+    const target = document.getElementById(postId);
+    target.nextElementSibling.remove();
+    target.remove();
+    blogRef.doc(postId).delete();
+}
 
 blogList.addEventListener("click", e => {
     e.preventDefault();
     if (e.target.classList.contains("delete")) {
-        const id = e.target.parentElement.getAttribute("id");
-        const target = document.getElementById(id);
-        target.nextElementSibling.remove();
-        target.remove();
-        blogRef.doc(id).delete();
+        const postId = e.target.parentElement.getAttribute("id");
+        handlePostDelete(postId);
     }
 })

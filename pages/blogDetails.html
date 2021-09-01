@@ -5,19 +5,19 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles/index.css">
-    <link rel="stylesheet" href="styles/blogDetails.css">
+    <link rel="stylesheet" href="../styles/index.css">
+    <link rel="stylesheet" href="../styles/blogDetails.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.1/css/all.css"
         integrity="sha384-xxzQGERXS00kBmZW/6qxqJPyxW3UR0BPsL4c8ILaIWXva5kFi7TxkIIaMiKtqV1Q" crossorigin="anonymous" />
     <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Quicksand" />
-    <link rel="icon" href="blogPicture.jpg" />
+    <link rel="icon" href="../img/blogPicture.jpg" />
     <title>Simple blog</title>
 </head>
 
 <body>
     <header>
         <nav class="grid">
-            <a href="index.html">
+            <a href="../index.html">
                 <h1>Simple blog</h1>
             </a>
             <a href="#" class="toggle-button">
@@ -25,18 +25,22 @@
                 <span class="bar"></span>
                 <span class="bar"></span>
             </a>
-            <ul id="nav-links">
-                <li class="myProfile loggedIn"><a href="#" id="myprofile">My profile</a></li>
-                <li class="login loggedOut"><a href="#" id="login">Login</a></li>
-                <li class="register loggedOut"><a href="#" id="register">Register</a></li>
-                <li class="NewBlog loggedIn"><a href="#" id="newBlog">New blog</a></li>
-                <li class="Logout loggedIn"><a href="#" id="logout">Logout</a></li>
+            <ul id="nav-links" aria-label="navigation links" role="menu">
+                <li class="myProfile loggedIn" aria-label="My Profile" role="button"><a href="#" id="myprofile">My
+                        profile</a></li>
+                <li class="login loggedOut" aria-label="Login" role="button"><a href="#" id="login">Login</a></li>
+                <li class="register loggedOut" aria-label="Register" role="button"><a href="#"
+                        id="register">Register</a></li>
+                <li class="NewBlog loggedIn" aria-label="New blog" role="button"><a href="#" id="newBlog">New blog</a>
+                </li>
+                <li class="Logout loggedIn" aria-label="Logout" role="button"><a href="#" id="logout">Logout</a></li>
             </ul>
+
         </nav>
     </header>
     <main>
-        <div class="nekaKlasa">
-            <ul id="blog-list"></ul>
+        <div class="blog-details-container">
+            <ul id="blog-list" aria-label="blogs"></ul>
             <button class="report">Report this post</button>
         </div>
 
@@ -96,12 +100,12 @@
     <!-- TODO: Add SDKs for Firebase products that you want to use
         https://firebase.google.com/docs/web/setup#available-libraries -->
 
-    <script src="scripts/auth.js"></script>
-    <script src="scripts/registerAndLogin.js"></script>
+    <script src="../scripts/auth.js"></script>
+    <script src="../scripts/registerAndLogin.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/date-fns/1.30.1/date_fns.min.js"></script>
-    <script src="scripts/nav.js"></script>
-    <script src="scripts/post.js"></script>
-    <script src="scripts/blogDetailsPage/blogDetails.js"></script>
+    <script src="../scripts/nav.js"></script>
+    <script src="../scripts/post.js"></script>
+    <script src="../scripts/blogDetailsPage/blogDetails.js"></script>
 </body>
 
 </html>

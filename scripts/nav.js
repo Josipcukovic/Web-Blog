@@ -83,7 +83,6 @@ if (wrapperRegister) {
 
 
 const toggleHamburgerButton = document.querySelector(".toggle-button");
-const navLinks = document.querySelector("#nav-links");
 const searchBoxy = document.querySelector(".searchForm");
 
 toggleHamburgerButton.addEventListener("click", e => {

@@ -9,68 +9,72 @@ const getComments = (postId) => {
     renderComments(commentSection, snapshot);
   })
 }
+const getDeleteTemplate = () => {
+  return (`<div class='delete' aria-label="delete blog button" role="button" >X</div>`)
+}
 
-
+const showReportButton = () => {
+  reportButton.classList.add("show");
+}
+const defaultUserPicture = "../img/userPic.png";
 ///dohvati blog
 blogRef.doc(postId).get().then(document => {
   const data = document.data();
   const created_at = data.created_at.toDate();
   const now = new Date().getTime();
   const timeAgo = dateFns.distanceInWords(now, created_at.getTime(), { addSuffix: true });
-  let njegova;
+  let ownerPicture;
   const ownerOfTheBlog = auth.currentUser ? (data.created_by_id == auth.currentUser.uid) : false;
   const ownerOfTheBlogOrAdmin = auth.currentUser ? ((data.created_by_id == auth.currentUser.uid) || (auth.currentUser.uid == idToCheck.id)) : false;
-  ///ovo je privremeno tu, promjeni to tako da svaki user mora imati sliku cim se registrira, tj uvalis mu defaultnu. Takodjer obrisi sve stare postove i usere
-  //tako da svi imaju id itd... ovo njegova ces isto obrisati i izmjeniti tako sto ce uzeti userovu sliku, posto ju mora imati i ubacit ces ju
   userRef.doc(data.created_by_id).get().then(user => {
     const userData = user.data();
 
     if ((userData != undefined)) {
       if (userData.slika != undefined) {
-        njegova = userData.slika;
+        ownerPicture = userData.slika;
       }
       else {
-        njegova = "userPic.png";
+        ownerPicture = defaultUserPicture;
       }
     }
     else {
-      njegova = "userPic.png";
+      ownerPicture = defaultUserPicture;
     }
 
-    const deleteTemplate = `<div class='delete' >X</div>`;
-    const blogTemplate = ` <li class="blog-list-element" id=${document.id}> 
-  <img src="${ownerOfTheBlog ? (auth.currentUser.photoURL != null ? auth.currentUser.photoURL : "userPic.png") : njegova}" alt="#" class="profilna">
+    const deleteTemplate = getDeleteTemplate();
+    const blogTemplate = ` <li class="blog-list-element" id=${document.id} aria-label="blog"> 
+  <img src="${ownerOfTheBlog ? (auth.currentUser.photoURL != null ? auth.currentUser.photoURL : defaultUserPicture) : ownerPicture}" alt="user picture" aria-label="user profile picture" class="profilna">
     <p class ="author">Written by: ${ownerOfTheBlog ? "You" : data.created_by}</p>
-    <span class="titleOfPost">${data.title}</span>
-    <img src="${data.picture != null ? data.picture : cat}" alt="#" class="blogPicture">
-      <span class="dataBody">${data.body}</span> 
+    <span class="titleOfPost" aria-label="blog title">${data.title}</span>
+    <img src="${data.picture != null ? data.picture : cat}" alt="#" class="blogPicture" alt="blog picture" aria-label="blog picture">
+      <span class="dataBody" aria-label="blog body">${data.body}</span> 
       <div class = "tooltip"> ${created_at.toLocaleDateString()} at ${created_at.toLocaleTimeString()} </div>
-      <p class="createdAt" onmouseover="toggleTimeCreated()" onmouseleave="toggleTimeCreated()"> ${timeAgo} </p> 
+      <p class="createdAt" onmouseover="toggleTimeCreated()" onmouseleave="toggleTimeCreated()" aria-label="creation time"> ${timeAgo} </p> 
       ${ownerOfTheBlogOrAdmin ? deleteTemplate : ""}
       
       </li> 
-      <div class="reactionContainer grid">
-      <div class="likeContainer">
-      <p class="like-number"></p>
-      <i class="fas fa-thumbs-up  fa-lg like"></i>
+      <div class="reactionContainer grid" aria-label="reaction section">
+      <div class="likeContainer" aria-label="like section">
+      <p class="like-number" aria-label="number of likes"></p>
+      <i class="fas fa-thumbs-up  fa-lg like" role="button" aria-label="like button"></i>
       </div>
-      <div class="dislikeContainer">
-      <p class="dislike-number"></p>
-      <i class="fas fa-thumbs-down fa-lg dislike"></i>
+      <div class="dislikeContainer" aria-label="dislike section">
+      <p class="dislike-number" aria-label="number of dislikes"></p>
+      <i class="fas fa-thumbs-down fa-lg dislike" role="button" aria-label="dislike button"></i>
       </div>
       </div>
       
       <div class ="commentSection details showComment" >
       <form class="commentForm">
-        <input type="text" name="comment" placeholder="Your comment..." class="comment">
+        <input type="text" name="comment" placeholder="Your comment..." class="comment" aria-label="input for your comment">
       </form>
-      <ul class="commentsDisplay"> </ul>
+      <ul class="commentsDisplay" aria-label="comments"> </ul>
       </div> 
       `
     blogList.insertAdjacentHTML('afterbegin', blogTemplate);
     getComments(document.id);
     getLikes();
-    reportButton.classList.add("show");
+    showReportButton();
   })
 
 });
@@ -101,7 +105,7 @@ function getLikes() {
 
 const openUserProfile = () => {
   localStorage.setItem("userId", auth.currentUser.uid);
-  window.location.href = "myProfile.html";
+  window.location.href = "../pages/myProfile.html";
 }
 
 const link = document.querySelector(".myProfile");
@@ -121,49 +125,88 @@ link.addEventListener("click", e => {
 
 const handleLikesAndDislikes = (path) => {
   path.get().then((doc) => {
-
     if (doc.exists) {
-      console.log("Document data:", doc.data());
       path.delete();
     }
   })
 };
 
+const handlePostDelete = () => {
+  const target = document.getElementById(postId);
+  const parent = target.parentElement;
+  parent.nextElementSibling.remove();
+  parent.remove();
+  blogRef.doc(postId).delete();
+}
 
+let likePressedCounter = 1;
+let dislikePressedCounter = 0;
 
+const handleLikePressedTwice = () => {
+  const likeRef = db.collection("likes").doc(postId).collection("likedBy").doc(auth.currentUser.uid);;
+  handleLikesAndDislikes(likeRef);
+  likePressedCounter = 1;
+}
 
-//deleting
+const handleDislikePressedTwice = () => {
+  const dislikeRef = db.collection("dislikes").doc(postId).collection("dislikedBy").doc(auth.currentUser.uid);
+  handleLikesAndDislikes(dislikeRef);
+  dislikePressedCounter = 1;
+}
+
+const handleLikePressedFirstTime = () => {
+  const likeRef = db.collection("likes");
+  likePressedCounter++;
+  dislikePressedCounter = 1;
+  likeRef.doc(postId).collection("likedBy").doc(auth.currentUser.uid).set({
+    likedby: auth.currentUser.uid
+  })
+}
+
+const handleDislikePressedFirstTime = () => {
+  const dislikeRef = db.collection("dislikes");
+  dislikePressedCounter++;
+  likePressedCounter = 1;
+  dislikeRef.doc(postId).collection("dislikedBy").doc(auth.currentUser.uid).set({
+    dislikedby: auth.currentUser.uid
+  })
+}
+
+const handleLikeClick = () => {
+  const dislikeRef = db.collection("dislikes").doc(postId).collection("dislikedBy").doc(auth.currentUser.uid);
+  handleLikesAndDislikes(dislikeRef);
+  if (likePressedCounter === 2) {
+    handleLikePressedTwice();
+  } else {
+    handleLikePressedFirstTime();
+  }
+}
+
+const handleDislikeClick = () => {
+  const likeRef = db.collection("likes").doc(postId).collection("likedBy").doc(auth.currentUser.uid);;
+  handleLikesAndDislikes(likeRef);
+
+  if (dislikePressedCounter === 2) {
+    handleDislikePressedTwice();
+
+  } else {
+    handleDislikePressedFirstTime();
+  }
+
+}
+
 blogList.addEventListener("click", e => {
   e.preventDefault();
   if (e.target.classList.contains("delete")) {
-    const id = e.target.parentElement.getAttribute("id");
-    const target = document.getElementById(id);
-    const parent = target.parentElement;
-    parent.nextElementSibling.remove();
-    parent.remove();
+    handlePostDelete();
 
-    blogRef.doc(id).delete();
-    //like logic
   } else if (e.target.classList.contains("like")) {
     if (!auth.currentUser) return alert("You must be logged in to like this post");
-    const likeRef = db.collection("likes");
-    const dislikeRef = db.collection("dislikes").doc(postId).collection("dislikedBy").doc(auth.currentUser.uid);
-    handleLikesAndDislikes(dislikeRef);
+    handleLikeClick();
 
-    likeRef.doc(postId).collection("likedBy").doc(auth.currentUser.uid).set({
-      likedby: auth.currentUser.uid
-    })
-
-    //dislike logic
   } else if (e.target.classList.contains("dislike")) {
     if (!auth.currentUser) return alert("You must be logged in to dislike this post");
-    const dislikeRef = db.collection("dislikes");
-    const likeRef = db.collection("likes").doc(postId).collection("likedBy").doc(auth.currentUser.uid);;
-    handleLikesAndDislikes(likeRef);
-
-    dislikeRef.doc(postId).collection("dislikedBy").doc(auth.currentUser.uid).set({
-      dislikedby: auth.currentUser.uid
-    })
+    handleDislikeClick();
   }
 })
 
@@ -171,23 +214,12 @@ blogList.addEventListener("click", e => {
 const reportsRef = db.collection("reports");
 
 reportButton.addEventListener("click", e => {
-  console.log(postId);
   reportsRef.doc(postId).get().then((doc) => {
-    console.log(doc);
-    if (doc.exists) {
-      console.log("Document data:", doc.data());
-      // reportsRef.doc(id).set({
-      //   reportedId: id,
-      //   reportedTimes: (doc.data().reportedTimes ? doc.data().reportedTimes + 1 : 0)
-      // });
-
-    } else {
+    if (!doc.exists) {
       reportsRef.doc(postId).set({
-        reportedId: postId,
-        reportedTimes: 1
+        reportedId: postId
       });
     }
-
   }).catch((error) => {
     console.log("Error getting document");
   });

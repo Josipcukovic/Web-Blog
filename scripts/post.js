@@ -3,7 +3,7 @@ const commentRef = db.collection("comments");
 let linkSlike;
 
 const blogForm = document.querySelector(".addNewBlogForm");
-const cat = "cat.jpg"
+const cat = "../img/cat.jpg"
 
 const blogList = document.querySelector("#blog-list");
 const addBlogPictureButton = document.getElementById("blogPhoto");
@@ -136,10 +136,10 @@ const renderUserInfoOnComments = (commentsDisplaySection, commentData) => {
         const data = doc.data();
         commentsDisplaySection.insertAdjacentHTML
             ('afterbegin', `<li class="commentElement grid">
-        <img src="${(data && data.slika) ? data.slika : "userPic.png"}" alt="#" class="pictureOnComment">
+        <img src="${(data && data.slika) ? data.slika : "../img/userPic.png"}" alt="user picture" aria-label="user picture" class="pictureOnComment">
         <div class="individualComment grid">
-            <r>${data ? `${data.ime} ${data.prezime}` : "unknown"}</r>
-            <z>${commentData.doc.data().comment}</z>
+            <r aria-label="user name">${data ? `${data.ime} ${data.prezime}` : "unknown"}</r>
+            <z aria-label="user comment">${commentData.doc.data().comment}</z>
           </div>
           </li>`);
     });
@@ -165,16 +165,18 @@ const renderComments = (commentSection, snapshot) => {
 
 let removeCommentListener;
 
+const removeComments = (commentSection) => {
+    commentSection.classList.remove("showComment");
+    const commentList = event.target.parentElement.nextElementSibling.querySelector(".commentsDisplay");
+    commentList.innerHTML = "";
+}
 
 ///prikazivanje komentara
 const addCommentListener = (commentShow, commentSection) => {
     commentShow.addEventListener("click", e => {
         if (commentSection.classList.contains("showComment")) {
-            commentSection.classList.remove("showComment");
-            const commentList = event.target.parentElement.nextElementSibling.querySelector(".commentsDisplay");
-            commentList.innerHTML = "";
+            removeComments(commentSection);
             removeCommentListener();
-
         } else {
 
             commentSection.classList.add("showComment");

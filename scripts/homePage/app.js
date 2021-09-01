@@ -58,8 +58,7 @@ searchForm.addEventListener("submit", e => {
 })
 
 
-// })
-////listener
+//rendering post data
 blogRef.orderBy("created_at", "desc").limit(5).get().then(snapshot => {
     let changes = snapshot.docChanges().reverse();
     setPostsStartingPoint(snapshot);
@@ -80,7 +79,7 @@ const deletePost = (postId) => {
 
 const showPostDetails = (postId) => {
     localStorage.setItem("postId", postId);
-    window.location.href = "blogDetails.html";
+    window.location.href = "pages/blogDetails.html";
 }
 ///brisanje objava i dodavanje komentara
 blogList.addEventListener("click", e => {
@@ -103,7 +102,7 @@ blogList.addEventListener("click", e => {
 const myProfileLink = document.querySelector(".myProfile");
 const openUserProfile = () => {
     localStorage.setItem("userId", auth.currentUser.uid);
-    window.location.href = "myProfile.html";
+    window.location.href = "../pages/myProfile.html";
 }
 
 myProfileLink.addEventListener("click", e => {

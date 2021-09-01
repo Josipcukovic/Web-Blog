@@ -73,6 +73,9 @@ main{
 .profile-content {
   padding-left: 10px;
 }
+.commentsDisplay{
+  padding-left: 0;
+}
 }
 
 

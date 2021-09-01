@@ -1,9 +1,9 @@
-.nekaKlasa .report{
+.blog-details-container .report{
   max-width: 30%;
   margin: 0;
   background-color: rgb(235, 211, 211);
 }
-.nekaKlasa #blog-list .blog-list-element {
+.blog-details-container #blog-list .blog-list-element {
   max-width: 100%;
 }
 
@@ -78,8 +78,11 @@
   }
 
   @media only screen and (max-width: 960px){
-    .nekaKlasa .report{
+    .blog-details-container .report{
       max-width: 40%;
+    }
+    .likeContainer{
+      margin: 0;
     }
   }
   @media only screen and (max-width: 800px) {
@@ -91,7 +94,7 @@
       
       grid-column: 3/7;
     }
-    .nekaKlasa .report{
+    .blog-details-container .report{
       max-width: 50%;
     }
     li {
@@ -108,7 +111,7 @@
     #blog-list .blogPicture{
       max-width: 60%;
     }
-    .nekaKlasa{
+    .blog-details-container{
       max-width: 60%;
     }
     li {
@@ -118,20 +121,29 @@
 
 
   @media only screen and (max-width: 570px){
-    .nekaKlasa{
+    .blog-details-container{
       max-width: 80%;
+    }
+    .dislikeContainer{
+      margin-left: 20px;
+    }
+    .likeContainer{
+      margin-left: 15px;
     }
   }
 
   @media only screen and (max-width: 370px){
-    .nekaKlasa{
+    .nekaKblog-details-containerlasa{
       max-width: 95%;
     }
-    .nekaKlasa .report{
+    .blog-details-container .report{
       max-width: 60%;
     }
     .dislikeContainer{
-      margin-left: 10px;
+      margin-left: 5px;
       
+    }
+    .likeContainer{
+      margin: 0;
     }
   }

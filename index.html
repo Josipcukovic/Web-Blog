@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles/index.css">
     <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Quicksand" />
-    <link rel="icon" href="blogPicture.jpg" />
+    <link rel="icon" href="img/blogPicture.jpg" />
     <title>Simple blog</title>
 </head>
 
@@ -15,7 +15,7 @@
 <body>
     <header>
         <nav class="grid">
-            <a href="index.html">
+            <a href="index.html" aria-label="Page Logo">
                 <h1>Simple blog</h1>
             </a>
             <a href="#" class="toggle-button">
@@ -23,23 +23,27 @@
                 <span class="bar"></span>
                 <span class="bar"></span>
             </a>
-            <ul id="nav-links">
-                <li class="myProfile loggedIn"><a href="#" id="myprofile">My profile</a></li>
-                <li class="login loggedOut"><a href="#" id="login">Login</a></li>
-                <li class="register loggedOut"><a href="#" id="register">Register</a></li>
-                <li class="NewBlog loggedIn"><a href="#" id="newBlog">New blog</a></li>
-                <li class="Logout loggedIn"><a href="#" id="logout">Logout</a></li>
+            <ul id="nav-links" aria-label="navigation links" role="menu">
+                <li class="myProfile loggedIn" aria-label="My Profile" role="button"><a href="#" id="myprofile">My
+                        profile</a></li>
+                <li class="login loggedOut" aria-label="Login" role="button"><a href="#" id="login">Login</a></li>
+                <li class="register loggedOut" aria-label="Register" role="button"><a href="#"
+                        id="register">Register</a></li>
+                <li class="NewBlog loggedIn" aria-label="New blog" role="button"><a href="#" id="newBlog">New blog</a>
+                </li>
+                <li class="Logout loggedIn" aria-label="Logout" role="button"><a href="#" id="logout">Logout</a></li>
 
 
             </ul>
             <form class="searchForm">
-                <input type="text" class="trazenjeBloga" name="searchBox" placeholder="Search by title..">
+                <input type="text" class="trazenjeBloga" name="searchBox" role="searchbox"
+                    placeholder="Search by title..">
             </form>
         </nav>
     </header>
 
     <main>
-        <ul id="blog-list"></ul>
+        <ul id="blog-list" aria-label="blogs"></ul>
         <p class="noMorePostsMessage">There are no more posts...</p>
     </main>
     <!-- new blog module -->

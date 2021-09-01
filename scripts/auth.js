@@ -24,14 +24,13 @@ auth.onAuthStateChanged((user) => {
 });
 
 let idToCheck = "";
-
+const navLinks = document.querySelector("#nav-links");
 adminRef.get().then(docs => {
     docs.forEach(admin => {
         idToCheck = admin.data();
         ///promjeni ovo ako je potrebno
         if (auth.currentUser.uid == idToCheck.id) {
-            const navLinks = document.querySelector("#nav-links");
-            const reportedPostsTemplate = `<li class="reportedPosts"><a href="reportedStuff.html">Reported Posts</a></li>`;
+            const reportedPostsTemplate = `<li class="reportedPosts"><a href="../pages/reportedStuff.html">Reported Posts</a></li>`;
             navLinks.insertAdjacentHTML('afterbegin', reportedPostsTemplate);
         }
     })
@@ -48,11 +47,8 @@ logoutButton.addEventListener("click", (e) => {
     auth.signOut().catch((error) => {
         window.alert(error.message);
     });
-    window.location.href = "index.html";
+    window.location.href = "../index.html";
 });
-
-
-
 
 const loggedIn = document.querySelectorAll(".loggedIn");
 const loggedOut = document.querySelectorAll(".loggedOut");
