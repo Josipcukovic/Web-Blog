@@ -609,10 +609,10 @@ li p{
 
 @media only screen and (max-width: 370px){
   #blog-list .blog-list-element{
-    max-width: 90%;
+    max-width: 96%;
   }
   .commentSection{
-    max-width: 90%;
+    max-width: 96%;
   }
   
   nav a {

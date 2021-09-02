@@ -122,7 +122,7 @@
 
   @media only screen and (max-width: 570px){
     .blog-details-container{
-      max-width: 80%;
+      max-width: 96%;
     }
     .dislikeContainer{
       margin-left: 20px;

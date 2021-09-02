@@ -83,7 +83,7 @@ blogForm.addEventListener("submit", e => {
     const bodyValue = blogForm["body"].value;
 
     if (isUserLoggedOut()) {
-        alert("Congratz, you almost made a new post but please, You must login to make new posts");
+        alert("Congratz, you almost made a new post but please, you should be logged in to make new posts");
         blogForm.reset();
         blogForm.parentElement.parentElement.parentElement.remove();
         return;
@@ -122,7 +122,7 @@ const addCommentFormListener = (forma, id) => {
             resetFormInputs(forma);
             return;
         } else if (isUserLoggedOut()) {
-            alert("You must login to comment");
+            alert("You should be logged in to comment");
             resetFormInputs(forma);
             return;
         }
