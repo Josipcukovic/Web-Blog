@@ -59,9 +59,26 @@ changeProfilePictureButton.addEventListener("click", e => {
 
 const handlePostDelete = (postId) => {
     const target = document.getElementById(postId);
-    target.nextElementSibling.remove();
-    target.remove();
-    blogRef.doc(postId).delete();
+    swal({
+        title: "Are you sure?",
+        text: "Once deleted, you will not be able to recover this post!",
+        icon: "warning",
+        buttons: ["Cancel", "Delete"],
+        dangerMode: true,
+    })
+        .then((willDelete) => {
+            if (willDelete) {
+                target.nextElementSibling.remove();
+                target.remove();
+                blogRef.doc(postId).delete();
+                swal("Your post has been deleted!", {
+                    icon: "success",
+                });
+            }
+        });
+
+
+
 }
 
 blogList.addEventListener("click", e => {

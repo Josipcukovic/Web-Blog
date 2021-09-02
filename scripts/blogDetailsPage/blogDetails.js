@@ -134,9 +134,27 @@ const handleLikesAndDislikes = (path) => {
 const handlePostDelete = () => {
   const target = document.getElementById(postId);
   const parent = target.parentElement;
-  parent.nextElementSibling.remove();
-  parent.remove();
-  blogRef.doc(postId).delete();
+
+  swal({
+    title: "Are you sure?",
+    text: "Once deleted, you will not be able to recover this post!",
+    icon: "warning",
+    buttons: ["Cancel", "Delete"],
+    dangerMode: true,
+  })
+    .then((willDelete) => {
+      if (willDelete) {
+        parent.nextElementSibling.remove();
+        parent.remove();
+        blogRef.doc(postId).delete();
+        swal("Your post has been deleted!", {
+          icon: "success",
+        });
+      }
+    });
+
+
+
 }
 
 let likePressedCounter = 1;
@@ -215,6 +233,7 @@ const reportsRef = db.collection("reports");
 
 reportButton.addEventListener("click", e => {
   reportsRef.doc(postId).get().then((doc) => {
+    alert("This post has been reported");
     if (!doc.exists) {
       reportsRef.doc(postId).set({
         reportedId: postId

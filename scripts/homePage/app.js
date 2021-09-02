@@ -72,9 +72,27 @@ blogRef.orderBy("created_at", "desc").limit(5).get().then(snapshot => {
 
 const deletePost = (postId) => {
     const target = document.getElementById(postId);
-    target.nextElementSibling.remove();
-    target.remove();
-    blogRef.doc(postId).delete();
+    swal({
+        title: "Are you sure?",
+        text: "Once deleted, you will not be able to recover this post!",
+        icon: "warning",
+        buttons: ["Cancel", "Delete"],
+        dangerMode: true,
+    })
+        .then((willDelete) => {
+            if (willDelete) {
+                target.nextElementSibling.remove();
+                target.remove();
+                blogRef.doc(postId).delete();
+                swal("Your post has been deleted!", {
+                    icon: "success",
+                });
+            } else {
+                // swal("Your imaginary file is safe!");
+            }
+        });
+
+
 }
 
 const showPostDetails = (postId) => {
